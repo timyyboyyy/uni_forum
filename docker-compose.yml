@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:latest
+    container_name: web_server
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+      - ./website:/usr/share/nginx/html:ro
+    depends_on:
+      - php
+    restart: always
+
+  php:
+    image: php:8.2-fpm
+    container_name: php_backend
+    volumes:
+      - ./website:/var/www/html
+    restart: always
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: website_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  db_data:
