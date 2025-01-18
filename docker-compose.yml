@@ -16,7 +16,7 @@ services:
 
   php:
     image: php:8.2-fpm
-    container_name: php_backend
+    container_name: forum_php_backend
     volumes:
       - ./website:/var/www/html
     restart: always
@@ -25,10 +25,10 @@ services:
     image: mysql:8.0
     container_name: mysql_db
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: website_db
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: forum_db
       MYSQL_USER: user
-      MYSQL_PASSWORD: user_password
+      MYSQL_PASSWORD: 1234
     ports:
       - "3306:3306"
     volumes:
