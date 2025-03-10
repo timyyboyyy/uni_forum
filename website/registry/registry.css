@@ -1,0 +1,81 @@
+/* Allgemeine Seiteneinstellungen */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+}
+
+/* Header */
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header a {
+    color: white;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+/* Registrierungsbereich */
+.register-section {
+    background-color: #fff;
+    padding: 20px;
+    margin: 40px auto;
+    width: 400px;
+    border-radius: 5px;
+}
+
+.register-section h2 {
+    text-align: center;
+}
+
+.register-section input[type=text],
+.register-section input[type=email],
+.register-section input[type=password] {
+    width: 100%;
+    padding: 8px;
+}
+
+.register-section input[type=submit] {
+    width: 100%;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.register-section p {
+    text-align: center;
+}
+
+.register-section a {
+   color:#007BFF; 
+   text-decoration:none; 
+}
+
+.register-section a:hover{
+   text-decoration:underline; 
+}
+
+/* Footer */
+footer {
+   text-align:center; 
+   padding:15px; 
+   background-color:#333; 
+   color:white; 
+}
+
+footer a {
+   color:white; 
+   text-decoration:none; 
+}
+
+footer a:hover{
+   text-decoration:underline; 
+}

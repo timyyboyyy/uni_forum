@@ -1,0 +1,77 @@
+/* Allgemeine Seiteneinstellungen */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Tabellen-Styling */
+table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #007BFF;
+    color: white;
+}
+
+/* Header-Bereich */
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #007BFF;
+    color: white;
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+/* Navigation */
+nav {
+    text-align: center;
+    background-color: #333;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: inline-block;
+}
+
+nav a:hover {
+    background-color: #007BFF;
+}
+
+/* Hauptinhalt */
+main {
+    padding: 20px 0;
+}
+
+/* Footer-Bereich */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #333;
+    color: white;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
