@@ -1,0 +1,78 @@
+/* Allgemeine Seiteneinstellungen */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+}
+
+/* Header */
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header a {
+    color: white;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+/* Neueste Beiträge */
+.latest-posts-section {
+    background-color: #fff;
+    padding: 20px;
+    margin: 40px auto;
+    width: 90%;
+    border-radius: 5px;
+}
+
+.latest-posts-section h2 {
+    text-align: center;
+}
+
+.latest-posts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.latest-posts-table th,
+.latest-posts-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.latest-posts-table th {
+    background-color: #007BFF;
+    color: white;
+}
+
+.latest-posts-table td a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.latest-posts-table td a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+   text-align:center; 
+   padding:15px; 
+   background-color:#333; 
+   color:white; 
+}
+
+footer a {
+   color:white; 
+   text-decoration:none; 
+}
+
+footer a:hover{
+   text-decoration:underline; 
+}

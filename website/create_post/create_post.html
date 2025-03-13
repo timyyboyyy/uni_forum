@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Beitrag erstellen - Uni-Forum</title>
+    <link rel="stylesheet" href="create_post.css">
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <h1>Uni-Forum</h1>
+    <p><a href="http://localhost:5500/website/forum_start/">Zurück zur Startseite</a></p>
+</header>
+
+<!-- Beitrag erstellen -->
+<section class="create-post-section">
+    <h2>Neuen Beitrag erstellen</h2>
+    <form action="#" method="post">
+        <!-- Titel des Beitrags -->
+        <label for="title">Titel:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <!-- Kategorie auswählen -->
+        <label for="category">Kategorie:</label><br>
+        <select id="category" name="category" required>
+            <option value="">Bitte wählen...</option>
+            <option value="general">Allgemeines zum Studium</option>
+            <option value="preparation">Prüfungsvorbereitung & Tipps</option>
+            <option value="technical">Technische Fragen & Support</option>
+            <option value="events">Veranstaltungen & Termine</option>
+        </select><br><br>
+
+        <!-- Inhalt des Beitrags -->
+        <label for="content">Inhalt:</label><br>
+        <textarea id="content" name="content" rows="6" cols="50" required></textarea><br><br>
+
+        <!-- Absenden -->
+        <input type="submit" value="Beitrag erstellen">
+    </form>
+</section>
+
+<!-- Footer -->
+<footer>
+    &copy; 2025 Uni-Forum | 
+    <a href="#">Impressum</a> | 
+    <a href="#">Datenschutzrichtlinien</a> | 
+    Kontakt: forum@uni.de
+</footer>
+
+</body>
+</html>

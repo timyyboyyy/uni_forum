@@ -1,0 +1,72 @@
+/* Allgemeine Seiteneinstellungen */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+}
+
+/* Header */
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header a {
+    color: white;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+/* Beitrag erstellen */
+.create-post-section {
+    background-color: #fff;
+    padding: 20px;
+    margin: 40px auto;
+    width: 400px;
+    border-radius: 5px;
+}
+
+.create-post-section h2 {
+    text-align: center;
+}
+
+.create-post-section input[type=text],
+.create-post-section select,
+.create-post-section textarea {
+    width: 100%;
+    padding: 8px;
+}
+
+.create-post-section input[type=submit] {
+    width: 100%;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.create-post-section input[type=submit]:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+footer {
+   text-align:center; 
+   padding:15px; 
+   background-color:#333; 
+   color:white; 
+}
+
+footer a {
+   color:white; 
+   text-decoration:none; 
+}
+
+footer a:hover{
+   text-decoration:underline; 
+}

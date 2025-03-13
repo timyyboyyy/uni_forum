@@ -18,7 +18,7 @@ services:
     image: php:8.2-fpm
     container_name: forum_php_backend
     volumes:
-      - ./website:/var/www/html
+      - ./backend:/var/www/html
     restart: always
 
   db:
