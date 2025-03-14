@@ -10,12 +10,15 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
       - ./website:/usr/share/nginx/html:ro
+      - ./backend:/var/www/html:ro
     depends_on:
       - php
     restart: always
 
   php:
-    image: php:8.2-fpm
+    build:
+      context: ./php
+      dockerfile: Dockerfile
     container_name: forum_php_backend
     volumes:
       - ./backend:/var/www/html
