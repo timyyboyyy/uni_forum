@@ -1,42 +1,62 @@
 version: '3.8'
 
 services:
-  web:
-    image: nginx:latest
-    container_name: web_server
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nginx
     ports:
       - "80:80"
-      - "443:443"
     volumes:
-      - ./nginx:/etc/nginx/conf.d:ro
-      - ./website:/usr/share/nginx/html:ro
-      - ./backend:/var/www/html:ro
+      - ./frontend:/var/www/html/frontend
+      - ./api:/var/www/html/api
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    restart: always
+    networks:
+      - app-network
     depends_on:
-      - php
-    restart: always
+      - php-api
 
-  php:
-    build:
-      context: ./php
-      dockerfile: Dockerfile
-    container_name: forum_php_backend
-    volumes:
-      - ./backend:/var/www/html
-    restart: always
-
-  db:
-    image: mysql:8.0
-    container_name: mysql_db
+  php-api:
+    build: 
+      context: ./docker/php
+    container_name: php-api
+    env_file:
+      - .env
     environment:
-      MYSQL_ROOT_PASSWORD: 12345
-      MYSQL_DATABASE: forum_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 1234
+      DB_HOST: mysql-db
+      DB_DATABASE: ${MYSQL_DATABASE}
+      DB_USERNAME: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./api:/var/www/html/api
+    restart: always
+    networks:
+      - app-network
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/mysql
     restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   db_data:
