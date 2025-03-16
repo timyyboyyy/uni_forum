@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Beitrag erstellen - Uni-Forum</title>
+    <link rel="stylesheet" href="create_post.css">
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <h1>Uni-Forum</h1>
+    <p><a href="http://localhost">Zurück zur Startseite</a></p>
+</header>
+
+<!-- Beitrag erstellen -->
+<section class="create-post-section">
+    <h2>Neuen Beitrag erstellen</h2>
+    <form id="post-form" method="post">
+        <div class="form-group">
+            <label for="title">Titel:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="category">Kategorie:</label>
+            <select id="category" name="category" required>
+                <option value="">Bitte wählen...</option>
+                <option value="1">Announcements</option>
+                <option value="2">Feedback</option>
+                <option value="3">General Discussion</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="content">Inhalt:</label>
+            <textarea id="content" name="content" rows="10" required></textarea>
+        </div>
+        
+        <input type="submit" value="Beitrag erstellen">
+    </form>
+    
+</section>
+
+<!-- Footer -->
+<footer>
+    &copy; 2025 Uni-Forum | 
+    <a href="#">Impressum</a> | 
+    <a href="#">Datenschutzrichtlinien</a> | 
+    Kontakt: forum@uni.de
+</footer>
+
+<script src="create_post.js"></script>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 <?php
+//5-Seite
 class Database {
-    private $host;  // Docker-Service-Name
+    private $host;
     private $db_name;
     private $username;
     private $password;

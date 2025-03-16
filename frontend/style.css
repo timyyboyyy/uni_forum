@@ -13,17 +13,46 @@ table {
     margin: 0 auto;
     border-collapse: collapse;
     background-color: #fff;
+    table-layout: fixed; /* Für gleichmäßige Spaltenverteilung */
 }
 
+/* Basis-Styling für alle Zellen */
 th, td {
     padding: 12px;
     border: 1px solid #ddd;
+    text-align: center; /* Zentrierter Text für Symmetrie */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+/* Spaltenbreiten definieren */
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 40%; /* Kategorie-Spalte */
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 20%; /* Anzahl Themen - kleinere Spalte */
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 40%; /* Letzter Beitrag-Spalte */
+}
+
+/* Überschriften-Styling beibehalten */
 th {
     background-color: #007BFF;
     color: white;
 }
+
+/* Für verlinkte Kategorien */
+td a {
+    color: #007BFF;
+    text-decoration: underline;
+}
+
 
 /* Header-Bereich */
 header {

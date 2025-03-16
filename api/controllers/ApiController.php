@@ -1,4 +1,5 @@
 <?php
+//2-Seite
 class ApiController {
     private $service;
 
@@ -38,13 +39,57 @@ class ApiController {
                 $result = $this->service->getAllCategories();
                 $this->sendResponse(200, json_encode($result));
                 break;
+            // In der handleGet-Methode innerhalb des switch-Blocks
+            case 'latest_posts':
+                $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+                $result = $this->service->getLatestPosts($limit);
+                $this->sendResponse(200, json_encode($result));
+                break;
+
             // Weitere Routen hier...
             default:
                 $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));
                 break;
         }
     }
-
+    
+    private function handlePost() {
+        $route = $_GET['route'] ?? '';
+        
+        // JSON-Daten aus dem Request-Body lesen
+        $inputJSON = file_get_contents('php://input');
+        $input = json_decode($inputJSON, TRUE);
+        
+        switch($route) {
+            case 'posts':
+                // Überprüfen der erforderlichen Daten
+                if (!isset($input['title']) || !isset($input['category_id']) || !isset($input['content']) || !isset($input['user_id'])) {
+                    $this->sendResponse(400, json_encode(['message' => 'Unvollständige Daten']));
+                    break;
+                }
+                
+                // Thread mit Content erstellen
+                $result = $this->service->createThread(
+                    $input['title'],
+                    $input['content'],
+                    $input['category_id'],
+                    $input['user_id']
+                );
+                
+                if ($result) {
+                    $this->sendResponse(201, json_encode(['message' => 'Thread erfolgreich erstellt', 'thread_id' => $result]));
+                } else {
+                    $this->sendResponse(500, json_encode(['message' => 'Fehler beim Erstellen des Threads']));
+                }
+                break;
+                
+            default:
+                $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));
+                break;
+        }
+    }
+    
+    
 
     // Weitere Handler-Methoden
     // ...

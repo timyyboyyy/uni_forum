@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Funktion zum Laden der Kategoriedaten
 function loadCategories() {
-    // Anzeigen eines Ladeindikatiors
+    // Anzeigen eines Ladeindikators
     const tableBody = document.querySelector('table tbody');
     if (tableBody) {
         tableBody.innerHTML = '<tr><td colspan="3">Daten werden geladen...</td></tr>';
@@ -42,29 +42,25 @@ function displayCategories(categories) {
     categories.forEach(category => {
         const row = document.createElement('tr');
         
-        // Kategoriename
+        // Kategoriename - MIT LINK FORMATIEREN wie in statischen Daten
         const nameCell = document.createElement('td');
-        nameCell.textContent = category.name;
+        const nameLink = document.createElement('a');
+        nameLink.href = '#' + (category.name || category.kategorie);
+        nameLink.textContent = category.name || category.kategorie;
+        nameLink.style.color = '#007BFF'; // Blau wie in den statischen Daten
+        nameCell.appendChild(nameLink);
         row.appendChild(nameCell);
         
         // Anzahl Themen
         const countCell = document.createElement('td');
-        countCell.textContent = category.topic_count;
+        countCell.textContent = category.topic_count || category.themen_anzahl || 0;
         row.appendChild(countCell);
         
-        // Letzter Beitrag
+        // Letzter Beitrag - FORMATIERUNG WIE STATISCHE DATEN
         const lastPostCell = document.createElement('td');
-        lastPostCell.textContent = formatDate(category.last_post_date) + ' von ' + category.last_post_user;
+        lastPostCell.textContent = category.last_post || category.letzter_beitrag || 'Keine Beiträge';
         row.appendChild(lastPostCell);
         
         tableBody.appendChild(row);
     });
-}
-
-// Hilfsfunktion zur Formatierung des Datums
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('de-DE') + ', ' + 
-           date.getHours().toString().padStart(2, '0') + ':' + 
-           date.getMinutes().toString().padStart(2, '0') + ' Uhr';
 }

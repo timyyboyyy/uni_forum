@@ -23,15 +23,34 @@ class DataService {
         
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $categories[] = [
-                'id' => $row['id'],
-                'name' => $row['name'],
-                'topic_count' => $row['topic_count'] ?? 0,
-                'last_post_date' => $row['last_post_date'] ?? null,
-                'last_post_user' => $row['last_post_user'] ?? 'Niemand'
+                'name' => $row['kategorie'],
+                'topic_count' => $row['themen_anzahl'],
+                'last_post' => $row['letzter_beitrag']
             ];
         }
         
         return $categories;
+    }
+    
+    public function createThread($title, $content, $category_id, $user_id) {
+        return $this->model->createThread($title, $content, $category_id, $user_id);
+    }
+    
+    public function getLatestPosts($limit = 10) {
+        $stmt = $this->model->getLatestPosts($limit);
+        $posts = [];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $posts[] = [
+                'id' => $row['thread_id'],
+                'title' => $row['title'],
+                'category' => $row['category'],
+                'author' => $row['author'],
+                'date' => date('d.m.Y, H:i', strtotime($row['date'])) . ' Uhr'
+            ];
+        }
+        
+        return $posts;
     }
 
 }
