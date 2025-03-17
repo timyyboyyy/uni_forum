@@ -95,6 +95,66 @@ class DataModel {
         $stmt->execute();
         return $stmt;
     }
+
+    public function getThreadById($thread_id) {
+        // Thread-Informationen abrufen
+        $query = "SELECT 
+                    t.ID, t.titel, t.content, t.created_at,
+                    u.username as author,
+                    c.name as category_name
+                  FROM 
+                    threads t
+                  JOIN
+                    users u ON t.users_ID = u.ID
+                  JOIN
+                    categories c ON t.categories_ID = c.ID
+                  WHERE 
+                    t.ID = :thread_id";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':thread_id', $thread_id);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function getThreadReplies($thread_id) {
+        // Antworten zum Thread abrufen
+        $query = "SELECT 
+                    c.ID, c.content, c.created_at,
+                    u.username as author
+                  FROM 
+                    contributions c
+                  JOIN
+                    users u ON c.users_ID = u.ID
+                  WHERE 
+                    c.threads_ID = :thread_id
+                  ORDER BY 
+                    c.created_at ASC";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':thread_id', $thread_id);
+        $stmt->execute();
+        
+        return $stmt;
+    }
+    
+    public function createReply($thread_id, $user_id, $content) {
+        $query = "INSERT INTO contributions (content, threads_ID, users_ID) 
+                  VALUES (:content, :thread_id, :user_id)";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':content', $content);
+        $stmt->bindParam(':thread_id', $thread_id);
+        $stmt->bindParam(':user_id', $user_id);
+        
+        if ($stmt->execute()) {
+            return $this->conn->lastInsertId();
+        }
+        
+        return false;
+    }
+    
     
 
 }

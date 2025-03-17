@@ -53,5 +53,43 @@ class DataService {
         return $posts;
     }
 
+    public function getThread($thread_id) {
+        $thread = $this->model->getThreadById($thread_id);
+        
+        if (!$thread) {
+            return null;
+        }
+        
+        // Antworten abrufen
+        $stmt = $this->model->getThreadReplies($thread_id);
+        $replies = [];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $replies[] = [
+                'id' => $row['ID'],
+                'content' => $row['content'],
+                'author' => $row['author'],
+                'date' => date('d.m.Y, H:i', strtotime($row['created_at'])) . ' Uhr'
+            ];
+        }
+        
+        return [
+            'thread' => [
+                'id' => $thread['ID'],
+                'title' => $thread['titel'],
+                'content' => $thread['content'],
+                'author' => $thread['author'],
+                'category' => $thread['category_name'],
+                'date' => date('d.m.Y, H:i', strtotime($thread['created_at'])) . ' Uhr'
+            ],
+            'replies' => $replies
+        ];
+    }
+    
+    public function createThreadReply($thread_id, $user_id, $content) {
+        return $this->model->createReply($thread_id, $user_id, $content);
+    }
+    
+
 }
 ?>

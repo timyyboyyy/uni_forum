@@ -46,6 +46,21 @@ class ApiController {
                 $this->sendResponse(200, json_encode($result));
                 break;
 
+            case 'thread':
+                if (!isset($_GET['id'])) {
+                    $this->sendResponse(400, json_encode(['message' => 'Thread-ID erforderlich']));
+                    break;
+                }
+                
+                $thread_id = (int)$_GET['id'];
+                $result = $this->service->getThread($thread_id);
+                
+                if ($result) {
+                    $this->sendResponse(200, json_encode($result));
+                } else {
+                    $this->sendResponse(404, json_encode(['message' => 'Thread nicht gefunden']));
+                }
+                break;
             // Weitere Routen hier...
             default:
                 $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));
@@ -80,6 +95,25 @@ class ApiController {
                     $this->sendResponse(201, json_encode(['message' => 'Thread erfolgreich erstellt', 'thread_id' => $result]));
                 } else {
                     $this->sendResponse(500, json_encode(['message' => 'Fehler beim Erstellen des Threads']));
+                }
+                break;
+
+            case 'reply':
+                if (!isset($input['thread_id']) || !isset($input['content']) || !isset($input['user_id'])) {
+                    $this->sendResponse(400, json_encode(['message' => 'Unvollständige Daten']));
+                    break;
+                }
+                
+                $result = $this->service->createThreadReply(
+                    $input['thread_id'],
+                    $input['user_id'],
+                    $input['content']
+                );
+                
+                if ($result) {
+                    $this->sendResponse(201, json_encode(['message' => 'Antwort erfolgreich erstellt', 'reply_id' => $result]));
+                } else {
+                    $this->sendResponse(500, json_encode(['message' => 'Fehler beim Erstellen der Antwort']));
                 }
                 break;
                 
