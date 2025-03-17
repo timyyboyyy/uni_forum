@@ -32,22 +32,17 @@ function loadCategories() {
 // Funktion zum Anzeigen der Kategorien in der Liste
 function displayCategories(categories) {
     const categoriesList = document.querySelector('.categories-list');
-    if (!categoriesList) return;
-    
-    // Liste leeren
     categoriesList.innerHTML = '';
     
-    // Kategorien in die Liste einfügen
-    if (categories && categories.length > 0) {
-        categories.forEach(category => {
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = '/threads?category=' + encodeURIComponent(category.name);
-            link.textContent = category.name;
-            listItem.appendChild(link);
-            categoriesList.appendChild(listItem);
-        });
-    } else {
-        categoriesList.innerHTML = '<li>Keine Kategorien gefunden</li>';
-    }
+    categories.forEach(category => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        // URL zum Unterordner "threads" innerhalb von "categories"
+        a.href = `/categories/threads/?id=${category.id}&name=${encodeURIComponent(category.name)}`;
+        a.textContent = category.name;
+        li.appendChild(a);
+        categoriesList.appendChild(li);
+    });
 }
+
+

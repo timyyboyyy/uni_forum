@@ -23,6 +23,7 @@ class DataService {
         
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $categories[] = [
+                'id' => $row['id'],
                 'name' => $row['kategorie'],
                 'topic_count' => $row['themen_anzahl'],
                 'last_post' => $row['letzter_beitrag']
@@ -88,6 +89,23 @@ class DataService {
     
     public function createThreadReply($thread_id, $user_id, $content) {
         return $this->model->createReply($thread_id, $user_id, $content);
+    }
+    
+    public function getThreadsByCategory($category_id) {
+        $stmt = $this->model->getThreadsByCategory($category_id);
+        $threads = [];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $threads[] = [
+                'id' => $row['ID'],
+                'title' => $row['titel'],
+                'author' => $row['author'],
+                'date' => date('d.m.Y, H:i', strtotime($row['created_at'])) . ' Uhr',
+                'reply_count' => $row['reply_count']
+            ];
+        }
+        
+        return $threads;
     }
     
 

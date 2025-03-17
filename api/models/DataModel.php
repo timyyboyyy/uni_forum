@@ -18,6 +18,7 @@ class DataModel {
 
     public function getCategories() {
         $query = "SELECT
+            c.ID as id,
             c.name AS 'kategorie',
             COUNT(DISTINCT t.ID) AS 'themen_anzahl',
             IFNULL(
@@ -155,7 +156,27 @@ class DataModel {
         return false;
     }
     
-    
+    public function getThreadsByCategory($category_id) {
+      $query = "SELECT 
+                  t.ID, t.titel, t.created_at,
+                  u.username as author,
+                  (SELECT COUNT(*) FROM contributions WHERE threads_ID = t.ID) as reply_count
+                FROM 
+                  threads t
+                JOIN
+                  users u ON t.users_ID = u.ID
+                WHERE 
+                  t.categories_ID = :category_id
+                ORDER BY 
+                  t.created_at DESC";
+      
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':category_id', $category_id);
+      $stmt->execute();
+      
+      return $stmt;
+  }
+  
 
 }
 ?>

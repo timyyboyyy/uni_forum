@@ -61,6 +61,18 @@ class ApiController {
                     $this->sendResponse(404, json_encode(['message' => 'Thread nicht gefunden']));
                 }
                 break;
+            // In der handleGet-Methode innerhalb des switch-Blocks hinzufügen
+            case 'category_threads':
+                if (!isset($_GET['id'])) {
+                    $this->sendResponse(400, json_encode(['message' => 'Kategorie-ID erforderlich']));
+                    break;
+                }
+                
+                $category_id = (int)$_GET['id'];
+                $result = $this->service->getThreadsByCategory($category_id);
+                $this->sendResponse(200, json_encode($result));
+                break;
+
             // Weitere Routen hier...
             default:
                 $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));

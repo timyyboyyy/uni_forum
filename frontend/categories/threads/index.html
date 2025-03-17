@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Themen in Kategorie</title>
+    <link rel="stylesheet" href="threads.css">
+</head>
+<body>
+    <header>
+        <h1>Forum - <span id="category-name">Kategorie wird geladen...</span></h1>
+        <nav>
+            <a href="/">Startseite</a> |
+            <a href="/categories">Kategorien</a> |
+            <a href="/latest_posts">Neueste Beiträge</a> |
+            <a href="/login">Login</a> |
+            <a href="/create_post">Beitrag erstellen</a>
+        </nav>
+    </header>
+    
+    <div class="threads-section">
+        <h2>Themen in dieser Kategorie</h2>
+        <table class="threads-table">
+            <thead>
+                <tr>
+                    <th>Thema</th>
+                    <th>Autor</th>
+                    <th>Datum</th>
+                    <th>Antworten</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Hier werden die Threads dynamisch eingefügt -->
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Mein Forum. Alle Rechte vorbehalten.</p>
+    </footer>
+    
+    <script src="threads.js"></script>
+</body>
+</html>
