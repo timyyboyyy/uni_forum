@@ -40,10 +40,10 @@ function displayLatestPosts(posts) {
             posts.forEach(post => {
                 const row = document.createElement('tr');
                 
-                // Titel mit Link
+                // Titel mit Link zum Thread - WICHTIG: Link im Format /thread/?id=X
                 const titleCell = document.createElement('td');
                 const titleLink = document.createElement('a');
-                titleLink.href = `/thread?id=${post.id}`;
+                titleLink.href = `/thread/?id=${post.id}`;  // Wichtig: Slash vor Fragezeichen
                 titleLink.textContent = post.title;
                 titleCell.appendChild(titleLink);
                 row.appendChild(titleCell);
