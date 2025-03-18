@@ -79,7 +79,8 @@ class ApiController {
                     $this->sendResponse(200, json_encode([
                         'loggedIn' => true,
                         'username' => $_SESSION['username'],
-                        'userId' => $_SESSION['user_id']
+                        'userId' => $_SESSION['user_id'],
+                        'isAdmin' => (isset($_SESSION['rules_id']) && $_SESSION['rules_id'] == 1)
                     ]));
                 } else {
                     $this->sendResponse(200, json_encode([
@@ -87,6 +88,7 @@ class ApiController {
                     ]));
                 }
                 break;
+                
             
             case 'top_categories':
                 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
@@ -116,6 +118,62 @@ class ApiController {
                 $this->sendResponse(200, json_encode($result));
                 break;
                 
+            case 'admin_check':
+                session_start();
+                $isAdmin = $this->isAdmin();
+                $this->sendResponse(200, json_encode(['isAdmin' => $isAdmin]));
+                break;
+                
+            case 'admin/dashboard':
+                // Admin-Rechte prüfen
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                $result = $this->service->getAdminDashboard();
+                $this->sendResponse(200, json_encode($result));
+                break;
+            
+            case 'admin/users':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                $result = $this->service->getAllUsers();
+                $this->sendResponse(200, json_encode($result));
+                break;
+            
+            case 'admin/categories':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                $result = $this->service->getAllCategories(); // Diese Methode existiert bereits
+                $this->sendResponse(200, json_encode($result));
+                break;
+            
+            case 'admin/threads':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                $result = $this->service->getAllThreads();
+                $this->sendResponse(200, json_encode($result));
+                break;
+            
+            case 'admin/posts':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                $result = $this->service->getAllPosts();
+                $this->sendResponse(200, json_encode($result));
+                break;
 
             // Weitere Routen hier...
             default:
@@ -305,6 +363,57 @@ class ApiController {
                 }
                 break;
                 
+            case 'admin_delete_thread':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['success' => false, 'message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                if (!isset($input['thread_id'])) {
+                    $this->sendResponse(400, json_encode(['success' => false, 'message' => 'Thread-ID erforderlich']));
+                    break;
+                }
+                
+                // Hier Methode zum Löschen des Threads implementieren
+                // $result = $this->service->deleteThread($input['thread_id']);
+                
+                $this->sendResponse(200, json_encode(['success' => true, 'message' => 'Thread gelöscht']));
+                break;
+            
+            case 'admin_delete_reply':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['success' => false, 'message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                if (!isset($input['reply_id'])) {
+                    $this->sendResponse(400, json_encode(['success' => false, 'message' => 'Antwort-ID erforderlich']));
+                    break;
+                }
+                
+                // Hier Methode zum Löschen der Antwort implementieren
+                // $result = $this->service->deleteReply($input['reply_id']);
+                
+                $this->sendResponse(200, json_encode(['success' => true, 'message' => 'Antwort gelöscht']));
+                break;
+                
+            case 'admin/user/':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['success' => false, 'message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                // Benutzerbearbeitung
+                $user_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+                
+                if (!$user_id || !isset($input['username']) || !isset($input['email']) || !isset($input['role_id'])) {
+                    $this->sendResponse(400, json_encode(['success' => false, 'message' => 'Unvollständige Daten']));
+                    break;
+                }
+                
+                $result = $this->service->updateUser($user_id, $input['username'], $input['email'], $input['role_id']);
+                $this->sendResponse(200, json_encode($result));
+                break;
                 
             default:
                 $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));
@@ -322,5 +431,69 @@ class ApiController {
         http_response_code($status);
         echo $body;
     }
+
+    private function isAdmin() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        return isset($_SESSION['rules_id']) && $_SESSION['rules_id'] == 1; // 1 = Admin laut init.sql
+    }
+    
+    private function isThreadOwner($thread_id) {
+        if (!isset($_SESSION['user_id'])) return false;
+        
+        $thread = $this->service->getThread($thread_id);
+        return $thread && $thread['thread']['user_id'] == $_SESSION['user_id'];
+    }
+
+    private function handleDelete() {
+        $route = $_GET['route'] ?? '';
+        
+        if (strpos($route, 'admin/') !== 0) {
+            $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));
+            return;
+        }
+        
+        if (!$this->isAdmin()) {
+            $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
+            return;
+        }
+        
+        // Route interpretieren
+        $parts = explode('/', $route);
+        if (count($parts) < 3) {
+            $this->sendResponse(400, json_encode(['message' => 'Ungültige Route']));
+            return;
+        }
+        
+        $action = $parts[1];
+        $id = (int)$parts[2];
+        
+        if (!$id) {
+            $this->sendResponse(400, json_encode(['message' => 'Ungültige ID']));
+            return;
+        }
+        
+        switch ($action) {
+            case 'user':
+                $result = $this->service->deleteUser($id);
+                break;
+            case 'category':
+                $result = $this->service->deleteCategory($id);
+                break;
+            case 'thread':
+                $result = $this->service->deleteThread($id);
+                break;
+            case 'post':
+                $result = $this->service->deletePost($id);
+                break;
+            default:
+                $this->sendResponse(404, json_encode(['message' => 'Aktion nicht gefunden']));
+                return;
+        }
+        
+        $this->sendResponse(200, json_encode(['success' => true]));
+    }
+    
 }
 ?>

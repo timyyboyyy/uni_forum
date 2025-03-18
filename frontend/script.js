@@ -25,12 +25,17 @@ function updateNavigation(userData) {
     if (!navElement) return;
     
     if (userData.loggedIn) {
-        // Benutzer ist eingeloggt - zeige Dropdown-Menü
+        let adminMenuHtml = '';
+        if (userData.isAdmin) {
+            adminMenuHtml = '<a href="/admin/">Admin-Bereich</a>';
+        }
+        
         navElement.innerHTML = `
             <a href="/">Startseite</a>
             <a href="/categories/">Kategorien</a>
             <a href="/latest_posts/">Neueste Beiträge</a>
             <a href="/create_post/">Beitrag erstellen</a>
+            ${adminMenuHtml}
             <div class="dropdown">
                 <a href="#" class="dropdown-toggle">${userData.username}</a>
                 <div class="dropdown-menu">

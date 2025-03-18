@@ -147,7 +147,98 @@ class DataService {
         return $this->model->updateUserPassword($user_id, $current_password, $new_password);
     }
     
+    public function getAllUsers() {
+        $stmt = $this->model->getAllUsers();
+        $users = [];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $users[] = [
+                'id' => $row['ID'],
+                'username' => $row['username'],
+                'email' => $row['email'],
+                'role' => $row['rules_ID'] == 1 ? 'Admin' : 'User',
+                'role_id' => $row['rules_ID'],
+                'created_at' => date('d.m.Y', strtotime($row['created_at']))
+            ];
+        }
+        
+        return $users;
+    }
     
+    public function getAdminDashboard() {
+        // Benutzeranzahl
+        $userCount = count($this->getAllUsers());
+        
+        // Kategorienanzahl
+        $categoryCount = count($this->getAllCategories());
+        
+        // Thread-Anzahl abrufen
+        $threadCount = $this->model->getThreadCount();
+        
+        // Beitragsanzahl abrufen
+        $postCount = $this->model->getPostCount();
+        
+        // Neueste Aktivitäten abrufen
+        $recentActivity = $this->model->getRecentActivity(10);
+        
+        return [
+            'userCount' => $userCount,
+            'categoryCount' => $categoryCount,
+            'threadCount' => $threadCount,
+            'postCount' => $postCount,
+            'recentActivity' => $recentActivity
+        ];
+    }
+    
+    public function getAllThreads() {
+        $stmt = $this->model->getAllThreads();
+        $threads = [];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $threads[] = [
+                'id' => $row['ID'],
+                'title' => $row['titel'],
+                'author' => $row['author'],
+                'category' => $row['category_name'],
+                'created_at' => date('d.m.Y', strtotime($row['created_at']))
+            ];
+        }
+        
+        return $threads;
+    }
+    
+    public function getAllPosts() {
+        $stmt = $this->model->getAllPosts();
+        $posts = [];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $posts[] = [
+                'id' => $row['ID'],
+                'content' => $row['content'],
+                'author' => $row['author'],
+                'thread' => $row['thread_title'],
+                'created_at' => date('d.m.Y', strtotime($row['created_at']))
+            ];
+        }
+        
+        return $posts;
+    }
+    
+    public function updateUser($user_id, $username, $email, $role_id) {
+        return $this->model->updateUser($user_id, $username, $email, $role_id);
+    }
+    
+    public function deleteCategory($category_id) {
+        return $this->model->deleteCategory($category_id);
+    }
+    
+    public function deleteThread($thread_id) {
+        return $this->model->deleteThread($thread_id);
+    }
+    
+    public function deletePost($post_id) {
+        return $this->model->deletePost($post_id);
+    }
     
 
 }

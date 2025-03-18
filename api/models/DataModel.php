@@ -421,7 +421,198 @@ public function updateUserPassword($user_id, $current_password, $new_password) {
   return ['success' => false, 'message' => 'Fehler beim Aktualisieren des Passworts'];
 }
 
+public function getAllUsers() {
+  $query = "SELECT ID, username, email, rules_ID, created_at FROM users ORDER BY ID";
+  $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  return $stmt;
+}
+
+public function deleteUser($user_id) {
+  // Zuerst alle Beiträge löschen
+  $delete_posts = "DELETE FROM contributions WHERE users_ID = :user_id";
+  $stmt_posts = $this->conn->prepare($delete_posts);
+  $stmt_posts->bindParam(':user_id', $user_id);
+  $stmt_posts->execute();
   
+  // Dann alle Threads löschen
+  $delete_threads = "DELETE FROM threads WHERE users_ID = :user_id";
+  $stmt_threads = $this->conn->prepare($delete_threads);
+  $stmt_threads->bindParam(':user_id', $user_id);
+  $stmt_threads->execute();
+  
+  // Schließlich den Benutzer löschen
+  $delete_user = "DELETE FROM users WHERE ID = :user_id";
+  $stmt_user = $this->conn->prepare($delete_user);
+  $stmt_user->bindParam(':user_id', $user_id);
+  
+  return $stmt_user->execute();
+}
+
+public function getThreadCount() {
+  $query = "SELECT COUNT(*) as count FROM threads";
+  $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  return $result['count'];
+}
+
+public function getPostCount() {
+  $query = "SELECT COUNT(*) as count FROM contributions";
+  $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  return $result['count'];
+}
+
+public function getRecentActivity($limit = 10) {
+  $query = "
+  (SELECT 
+      'Neuer Thread' as action, 
+      u.username as user, 
+      DATE_FORMAT(t.created_at, '%d.%m.%Y, %H:%i') as date,
+      t.titel as details
+   FROM threads t
+   JOIN users u ON t.users_ID = u.ID
+   ORDER BY t.created_at DESC
+   LIMIT :half_limit)
+  
+  UNION ALL
+  
+  (SELECT 
+      'Neue Antwort' as action, 
+      u.username as user, 
+      DATE_FORMAT(c.created_at, '%d.%m.%Y, %H:%i') as date,
+      CONCAT('Re: ', t.titel) as details
+   FROM contributions c
+   JOIN users u ON c.users_ID = u.ID
+   JOIN threads t ON c.threads_ID = t.ID
+   ORDER BY c.created_at DESC
+   LIMIT :half_limit)
+   
+   ORDER BY date DESC
+   LIMIT :limit";
+  
+  $half_limit = intval($limit / 2);
+  
+  $stmt = $this->conn->prepare($query);
+  $stmt->bindParam(':half_limit', $half_limit, PDO::PARAM_INT);
+  $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+  $stmt->execute();
+  
+  $activities = [];
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $activities[] = $row;
+  }
+  
+  return $activities;
+}
+
+public function getAllThreads() {
+  $query = "SELECT 
+              t.ID, t.titel, t.created_at,
+              u.username as author,
+              c.name as category_name
+            FROM threads t
+            JOIN users u ON t.users_ID = u.ID
+            JOIN categories c ON t.categories_ID = c.ID
+            ORDER BY t.created_at DESC";
+  
+  $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  return $stmt;
+}
+
+public function getAllPosts() {
+  $query = "SELECT 
+              c.ID, c.content, c.created_at,
+              u.username as author,
+              t.titel as thread_title
+            FROM contributions c
+            JOIN users u ON c.users_ID = u.ID
+            JOIN threads t ON c.threads_ID = t.ID
+            ORDER BY c.created_at DESC";
+  
+  $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  return $stmt;
+}
+
+public function updateUser($user_id, $username, $email, $role_id) {
+  // Prüfen, ob Benutzername oder E-Mail bereits existieren
+  $check_query = "SELECT ID FROM users 
+                 WHERE (username = :username OR email = :email) 
+                 AND ID != :user_id";
+  
+  $check_stmt = $this->conn->prepare($check_query);
+  $check_stmt->bindParam(':username', $username);
+  $check_stmt->bindParam(':email', $email);
+  $check_stmt->bindParam(':user_id', $user_id);
+  $check_stmt->execute();
+  
+  if ($check_stmt->rowCount() > 0) {
+      return ['success' => false, 'message' => 'Benutzername oder E-Mail wird bereits verwendet'];
+  }
+  
+  // Benutzer aktualisieren
+  $update_query = "UPDATE users 
+                  SET username = :username, email = :email, rules_ID = :role_id 
+                  WHERE ID = :user_id";
+  
+  $update_stmt = $this->conn->prepare($update_query);
+  $update_stmt->bindParam(':username', $username);
+  $update_stmt->bindParam(':email', $email);
+  $update_stmt->bindParam(':role_id', $role_id);
+  $update_stmt->bindParam(':user_id', $user_id);
+  
+  if ($update_stmt->execute()) {
+      return ['success' => true];
+  }
+  
+  return ['success' => false, 'message' => 'Fehler beim Aktualisieren des Benutzers'];
+}
+
+public function deleteCategory($category_id) {
+  try {
+      // Transaktion starten
+      $this->conn->beginTransaction();
+      
+      // Alle Antworten zu Threads dieser Kategorie löschen
+      $delete_replies = "DELETE FROM contributions 
+                        WHERE threads_ID IN (SELECT ID FROM threads WHERE categories_ID = :category_id)";
+      $stmt_replies = $this->conn->prepare($delete_replies);
+      $stmt_replies->bindParam(':category_id', $category_id);
+      $stmt_replies->execute();
+      
+      // Alle Threads dieser Kategorie löschen
+      $delete_threads = "DELETE FROM threads WHERE categories_ID = :category_id";
+      $stmt_threads = $this->conn->prepare($delete_threads);
+      $stmt_threads->bindParam(':category_id', $category_id);
+      $stmt_threads->execute();
+      
+      // Kategorie löschen
+      $delete_category = "DELETE FROM categories WHERE ID = :category_id";
+      $stmt_category = $this->conn->prepare($delete_category);
+      $stmt_category->bindParam(':category_id', $category_id);
+      $stmt_category->execute();
+      
+      // Transaktion abschließen
+      $this->conn->commit();
+      return true;
+  } catch (Exception $e) {
+      // Bei Fehler: Rollback
+      $this->conn->rollBack();
+      return false;
+  }
+}
+
+public function deletePost($post_id) {
+  $query = "DELETE FROM contributions WHERE ID = :post_id";
+  $stmt = $this->conn->prepare($query);
+  $stmt->bindParam(':post_id', $post_id);
+  return $stmt->execute();
+}
+
 
 }
 ?>
