@@ -78,7 +78,7 @@ function updateNavigation(userData) {
             <a href="/categories/">Kategorien</a>
             <a href="/latest_posts/">Neueste Beiträge</a>
             <a href="/login/">Login</a>
-            <a href="/register/">Registrieren</a>
+            <a href="/registry/">Registrieren</a>
         `;
     }
 }
