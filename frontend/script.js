@@ -26,15 +26,37 @@ function updateNavigation(userData) {
     if (!navElement) return;
     
     if (userData.loggedIn) {
-        // Benutzer ist eingeloggt - zeige Benutzername
+        // Benutzer ist eingeloggt - zeige Dropdown-Menü
         navElement.innerHTML = `
             <a href="/">Startseite</a>
             <a href="/categories/">Kategorien</a>
-            <a href="/latest_posts/">Neuste Beiträge</a>
+            <a href="/latest_posts/">Neueste Beiträge</a>
             <a href="/create_post/">Beitrag erstellen</a>
-            <a href="/user_profile/">${userData.username}</a>
-            <a href="#" id="logout-link">Logout</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle">${userData.username}</a>
+                <div class="dropdown-menu">
+                    <a href="/user_profile/">Profileinstellungen</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" id="logout-link">Ausloggen</a>
+                </div>
+            </div>
         `;
+        
+        // Dropdown-Funktionalität hinzufügen
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        
+        dropdownToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            dropdownMenu.classList.toggle('show');
+        });
+        
+        // Klick außerhalb des Dropdown-Menüs schließt es
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('.dropdown-toggle') && !event.target.closest('.dropdown-menu')) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
         
         // Logout-Funktion hinzufügen
         document.getElementById('logout-link').addEventListener('click', function(e) {
@@ -55,12 +77,13 @@ function updateNavigation(userData) {
         navElement.innerHTML = `
             <a href="/">Startseite</a>
             <a href="/categories/">Kategorien</a>
-            <a href="/latest_posts/">Neuste Beiträge</a>
+            <a href="/latest_posts/">Neueste Beiträge</a>
             <a href="/login/">Login</a>
             <a href="/register/">Registrieren</a>
         `;
     }
 }
+
 
 
 // Funktion zum Laden der Kategoriedaten
