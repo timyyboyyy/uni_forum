@@ -2,43 +2,27 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Uni-Forum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-
-<!-- Header -->
-<header>
-    <h1>Uni-Forum</h1>
-    <p><a href="http://localhost">Zurück zur Startseite</a></p>
-</header>
-
-<!-- Login-Bereich -->
-<section class="login-section">
-    <h2>Login</h2>
-    <form action="#" method="post">
-        <label for="username">Benutzername:</label><br>
-        <input type="text" id="username" name="username" required><br><br>
-
-        <label for="password">Passwort:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-
-        <input type="submit" value="Einloggen">
-    </form>
-
-    <p>Noch kein Konto? <a href="http://localhost:5500/frontend/registry/registry.html">Jetzt registrieren</a></p>
-    <p><a href="#">Passwort vergessen?</a></p>
-</section>
-
-<!-- Footer -->
-<footer>
-    &copy; 2025 Uni-Forum | 
-    <a href="#">Impressum</a> | 
-    <a href="#">Datenschutzrichtlinien</a> | 
-    Kontakt: forum@uni.de
-</footer>
-
-<script src="script.js"></script>
-
+    <div class="login-container">
+        <h2>Login</h2>
+        <div id="error-message" class="error-message" style="display: none;"></div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Benutzername oder E-Mail:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Passwort:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Einloggen</button>
+            <p>Noch kein Konto? <a href="/registry/">Hier registrieren</a></p>
+        </form>
+    </div>
+    <script src="login.js"></script>
 </body>
 </html>

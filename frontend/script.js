@@ -1,66 +1,127 @@
 // forum.js - Datenbankintegration für das Forum
+// Am Anfang der script.js, direkt nach dem DOMContentLoaded Event
 document.addEventListener('DOMContentLoaded', function() {
     loadCategories();
+    checkLoginStatus(); // Neue Funktion aufrufen
 });
 
+// Neue Funktion zum Prüfen des Login-Status
+function checkLoginStatus() {
+    fetch('/api/check-auth', {
+        method: 'GET',
+        credentials: 'include' // Wichtig für Session-Cookies
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateNavigation(data);
+    })
+    .catch(error => {
+        console.error('Fehler beim Prüfen des Login-Status:', error);
+    });
+}
+
+// Funktion zum Aktualisieren der Navigation
+function updateNavigation(userData) {
+    const navElement = document.querySelector('nav');
+    if (!navElement) return;
+    
+    if (userData.loggedIn) {
+        // Benutzer ist eingeloggt - zeige Benutzername
+        navElement.innerHTML = `
+            <a href="/">Startseite</a>
+            <a href="/categories/">Kategorien</a>
+            <a href="/latest_posts/">Neuste Beiträge</a>
+            <a href="/create_post/">Beitrag erstellen</a>
+            <a href="/user_profile/">${userData.username}</a>
+            <a href="#" id="logout-link">Logout</a>
+        `;
+        
+        // Logout-Funktion hinzufügen
+        document.getElementById('logout-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('/api/logout', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                }
+            });
+        });
+    } else {
+        // Benutzer ist nicht eingeloggt - zeige Login/Register
+        navElement.innerHTML = `
+            <a href="/">Startseite</a>
+            <a href="/categories/">Kategorien</a>
+            <a href="/latest_posts/">Neuste Beiträge</a>
+            <a href="/login/">Login</a>
+            <a href="/register/">Registrieren</a>
+        `;
+    }
+}
+
+
+// Funktion zum Laden der Kategoriedaten
 // Funktion zum Laden der Kategoriedaten
 function loadCategories() {
     // Anzeigen eines Ladeindikators
     const tableBody = document.querySelector('table tbody');
     if (tableBody) {
-        tableBody.innerHTML = '<tr><td colspan="3">Daten werden geladen...</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="3">Kategorien werden geladen...</td></tr>';
+        
+        // API-Anfrage für Top-Kategorien statt aller Kategorien
+        fetch('/api/top_categories')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Netzwerkantwort war nicht ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayCategories(data, tableBody);
+            })
+            .catch(error => {
+                console.error('Fehler beim Laden der Kategorien:', error);
+                tableBody.innerHTML = '<tr><td colspan="3">Fehler beim Laden der Daten.</td></tr>';
+            });
     }
-    
-    // API-Anfrage an das PHP-Backend
-    fetch('/api/categories')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Netzwerkantwort war nicht ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayCategories(data);
-        })
-        .catch(error => {
-            console.error('Fehler beim Abrufen der Kategoriedaten:', error);
-            if (tableBody) {
-                tableBody.innerHTML = '<tr><td colspan="3">Fehler beim Laden der Daten. Bitte später erneut versuchen.</td></tr>';
-            }
-        });
 }
 
-// Funktion zur Anzeige der Kategoriedaten in der Tabelle
-function displayCategories(categories) {
-    const tableBody = document.querySelector('table tbody');
-    if (!tableBody) return;
-    
+
+// Funktion zum Anzeigen der Kategorien in der Tabelle
+function displayCategories(categories, tableBody) {
     // Tabelle leeren
     tableBody.innerHTML = '';
     
-    // Daten in Tabelle einfügen
+    // Kategorien in die Tabelle einfügen
     categories.forEach(category => {
         const row = document.createElement('tr');
         
-        // Kategoriename - MIT LINK FORMATIEREN wie in statischen Daten
-        const nameCell = document.createElement('td');
-        const nameLink = document.createElement('a');
-        nameLink.href = '#' + (category.name || category.kategorie);
-        nameLink.textContent = category.name || category.kategorie;
-        nameLink.style.color = '#007BFF'; // Blau wie in den statischen Daten
-        nameCell.appendChild(nameLink);
-        row.appendChild(nameCell);
+        // Kategorie-Name mit Link
+        const categoryCell = document.createElement('td');
+        const categoryLink = document.createElement('a');
+        categoryLink.href = `/categories/threads/?id=${category.id}&name=${encodeURIComponent(category.name)}`;
+        categoryLink.textContent = category.name;
+        categoryCell.appendChild(categoryLink);
         
-        // Anzahl Themen
-        const countCell = document.createElement('td');
-        countCell.textContent = category.topic_count || category.themen_anzahl || 0;
-        row.appendChild(countCell);
+        // Anzahl der Themen
+        const topicCountCell = document.createElement('td');
+        topicCountCell.textContent = category.topic_count;
         
-        // Letzter Beitrag - FORMATIERUNG WIE STATISCHE DATEN
+        // Letzter Beitrag - HTML direkt einsetzen
         const lastPostCell = document.createElement('td');
-        lastPostCell.textContent = category.last_post || category.letzter_beitrag || 'Keine Beiträge';
+        lastPostCell.innerHTML = category.last_post;
+        
+        // Zellen zur Zeile hinzufügen
+        row.appendChild(categoryCell);
+        row.appendChild(topicCountCell);
         row.appendChild(lastPostCell);
         
+        // Zeile zur Tabelle hinzufügen
         tableBody.appendChild(row);
     });
 }
+
+

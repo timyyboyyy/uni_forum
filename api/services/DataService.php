@@ -20,7 +20,6 @@ class DataService {
     public function getAllCategories() {
         $stmt = $this->model->getCategories();
         $categories = [];
-        
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $categories[] = [
                 'id' => $row['id'],
@@ -107,6 +106,48 @@ class DataService {
         
         return $threads;
     }
+
+    public function registerUser($username, $email, $password) {
+        return $this->model->registerUser($username, $email, $password);
+    }
+    
+    public function loginUser($username, $password) {
+        return $this->model->loginUser($username, $password);
+    }
+    
+    public function getTopCategories($limit = 5) {
+        $stmt = $this->model->getCategories($limit);
+        $categories = [];
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $categories[] = [
+                'id' => $row['id'],
+                'name' => $row['kategorie'],
+                'topic_count' => $row['themen_anzahl'],
+                'last_post' => $row['letzter_beitrag']
+            ];
+        }
+        
+        return $categories;
+    }
+
+    public function getUserProfile($user_id) {
+        return $this->model->getUserProfile($user_id);
+    }
+    
+    public function getUserActivity($user_id) {
+        return $this->model->getUserActivity($user_id);
+    }
+    
+    public function updateUserProfile($user_id, $username, $email) {
+        return $this->model->updateUserProfile($user_id, $username, $email);
+    }
+    
+    public function updateUserPassword($user_id, $current_password, $new_password) {
+        return $this->model->updateUserPassword($user_id, $current_password, $new_password);
+    }
+    
+    
     
 
 }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benutzerprofil</title>
+    <link rel="stylesheet" href="user_profile.css">
+</head>
+<body>
+    <header>
+        <h1>Forum - Benutzerprofil</h1>
+        <nav>
+            <a href="/">Startseite</a> |
+            <a href="/categories/">Kategorien</a> |
+            <a href="/latest_posts/">Neueste Beiträge</a> |
+            <a href="/create_post/">Beitrag erstellen</a> |
+            <span id="username-display"></span> |
+            <a href="#" id="logout-link">Logout</a>
+        </nav>
+    </header>
+    
+    <div class="profile-container">
+        <h2>Mein Profil</h2>
+        
+        <div id="error-message" class="error-message" style="display: none;"></div>
+        <div id="success-message" class="success-message" style="display: none;"></div>
+        
+        <div class="profile-card">
+            <div class="profile-section">
+                <h3>Benutzerinformationen</h3>
+                <form id="user-info-form">
+                    <div class="form-group">
+                        <label for="username">Benutzername:</label>
+                        <input type="text" id="username" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-Mail:</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="created-at">Mitglied seit:</label>
+                        <input type="text" id="created-at" readonly>
+                    </div>
+                    <button type="submit">Informationen aktualisieren</button>
+                </form>
+            </div>
+            
+            <div class="profile-section">
+                <h3>Passwort ändern</h3>
+                <form id="password-form">
+                    <div class="form-group">
+                        <label for="current-password">Aktuelles Passwort:</label>
+                        <input type="password" id="current-password" name="current-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">Neues Passwort:</label>
+                        <input type="password" id="new-password" name="new-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Passwort bestätigen:</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+                    <button type="submit">Passwort ändern</button>
+                </form>
+            </div>
+            
+            <div class="profile-section">
+                <h3>Meine Aktivitäten</h3>
+                <div class="activity-summary">
+                    <p>Erstellte Threads: <span id="thread-count">Wird geladen...</span></p>
+                    <p>Beiträge: <span id="post-count">Wird geladen...</span></p>
+                </div>
+                <div class="recent-activity">
+                    <h4>Letzte Aktivitäten</h4>
+                    <ul id="activity-list">
+                        <li>Daten werden geladen...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Mein Forum. Alle Rechte vorbehalten.</p>
+    </footer>
+    
+    <script src="user_profile.js"></script>
+</body>
+</html>

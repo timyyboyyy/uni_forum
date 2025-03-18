@@ -1,12 +1,10 @@
-/* Allgemeine Seiteneinstellungen */
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #f4f7fa;
-    color: #333;
     margin: 0;
+    padding: 0;
 }
 
-/* Header */
 header {
     background-color: #007BFF;
     color: white;
@@ -16,65 +14,65 @@ header {
 
 header a {
     color: white;
+    margin: 0 10px;
+    text-decoration: none;
 }
 
-header a:hover {
-    text-decoration: underline;
-}
-
-/* Login-Bereich */
-.login-section {
-    background-color: #fff;
-    padding: 20px;
-    margin: 40px auto;
-    width: 350px;
+.login-container {
+    max-width: 500px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 30px;
     border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.login-section h2 {
-    text-align: center;
+.form-group {
+    margin-bottom: 20px;
 }
 
-.login-section input[type=text],
-.login-section input[type=password] {
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
-.login-section input[type=submit] {
-    width: 100%;
+button {
     background-color: #007BFF;
     color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    background-color: #ffdddd;
+    color: #ff0000;
     padding: 10px;
-    border-radius: 5px;
+    margin-bottom: 20px;
+    border-radius: 4px;
 }
 
-.login-section p {
-    text-align: center;
-}
-
-.login-section a {
-   color:#007BFF; 
-   text-decoration:none; 
-}
-
-.login-section a:hover{
-   text-decoration:underline; 
-}
-
-/* Footer */
 footer {
-   text-align:center; 
-   padding:15px; 
-   background-color:#333; 
-   color:white; 
-}
-
-footer a {
-   color:white; 
-   text-decoration:none; 
-}
-
-footer a:hover{
-   text-decoration:underline; 
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+    background-color: #333;
+    color: white;
 }

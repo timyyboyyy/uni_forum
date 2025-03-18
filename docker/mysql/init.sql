@@ -1,9 +1,3 @@
-CREATE DATABASE forum_db;
-
-CREATE USER 'forum_usr'@'localhost' IDENTIFIED BY '1234';
-GRANT ALL PRIVILEGES ON forum_db.* TO 'forum_usr'@'localhost';
-FLUSH PRIVILEGES;
-
 USE forum_db;
 
 CREATE TABLE rules(

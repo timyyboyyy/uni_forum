@@ -15,33 +15,33 @@
 
 <!-- Navigation -->
 <nav>
-      <a href="http://localhost/categories">Kategorien</a>
-      <a href="http://localhost/latest_posts">Neueste Beiträge</a>
-      <a href="http://localhost/create_post">Beitrag Posten</a>
-      <a href="http://localhost/registry">Registrieren</a>
-      <a href="http://localhost/login">Login</a>
-</nav>
+          <a href="/">Startseite</a> |
+          <a href="/categories/">Kategorien</a> |
+          <a href="/latest_posts/">Neuste Beiträge</a> |
+          <a href="/create_post/">Beitrag erstellen</a> |
+          <a href="/logout/">Logout</a>
+          <a href="/login/">Login</a> |
+          <a href="/registry/">Registrieren</a>
+  </nav>
+  
 
 <!-- Hauptinhalt -->
 <main>
-    <h1 align="center">Top Kategorien</h1>
-      <table>
-        <thead>
-        <tr>
-          <th>Kategorie</th>
-          <th>Anzahl Themen</th>
-          <th>Letzter Beitrag</th>
-        </tr>
+  <h2 align="center">Top Kategorien</h2>
+  <table>
+      <thead>
+          <tr>
+              <th>Kategorie</th>
+              <th>Anzahl Themen</th>
+              <th>Letzter Beitrag</th>
+          </tr>
       </thead>
-
       <tbody>
-      <tr>
-          
-      </tr>
-      </tbody> 
-      </table>
-
+          <!-- Kategorien werden dynamisch eingefügt -->
+      </tbody>
+  </table>
 </main>
+
 
 <!-- Footer -->
 <footer>
@@ -50,6 +50,13 @@
       <a href="#">Datenschutzrichtlinien</a> | 
       Kontakt: forum@uni.de
 </footer>
+
+<script>
+      document.getElementById('logout-link').addEventListener('click', function() {
+          fetch('/api/logout', {method: 'POST'})
+              .then(() => window.location.href = '/');
+      });
+      </script>
 
 <script src="script.js"></script>
 

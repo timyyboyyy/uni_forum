@@ -11,12 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     loadThread(threadId);
     
-    // Event-Listener für das Antwortformular
-    const replyForm = document.getElementById('reply-form');
-    replyForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        submitReply(threadId);
-    });
+    // Login-Status überprüfen und Antwortsektion entsprechend anzeigen/ausblenden
+    checkLoginStatus(threadId);
 });
 
 function loadThread(threadId) {
@@ -73,6 +69,44 @@ function displayThread(data) {
     }
 }
 
+// Neue Funktion: Login-Status überprüfen
+function checkLoginStatus(threadId) {
+    // Neuer API-Endpunkt muss in ApiController.php hinzugefügt werden
+    fetch('/api/check-auth')
+        .then(response => response.json())
+        .then(data => {
+            const replySection = document.querySelector('.reply-section');
+            
+            if (data.loggedIn) {
+                // Benutzer ist eingeloggt - Antwortformular anzeigen
+                replySection.innerHTML = `
+                    <h3>Neue Antwort verfassen</h3>
+                    <form id="reply-form">
+                        <textarea name="content" id="reply-content" rows="5" placeholder="Deine Antwort..." required></textarea>
+                        <input type="submit" value="Antwort abschicken">
+                    </form>
+                `;
+                
+                // Event-Listener für das Antwortformular
+                const replyForm = document.getElementById('reply-form');
+                replyForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    submitReply(threadId);
+                });
+            } else {
+                // Benutzer ist nicht eingeloggt - Login-Hinweis anzeigen
+                replySection.innerHTML = `
+                    <div class="login-message">
+                        <p>Du musst <a href="/login/">eingeloggt</a> sein, um auf diesen Thread zu antworten.</p>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Fehler beim Prüfen des Login-Status:', error);
+        });
+}
+
 function submitReply(threadId) {
     const content = document.getElementById('reply-content').value;
     
@@ -88,12 +122,17 @@ function submitReply(threadId) {
         },
         body: JSON.stringify({
             thread_id: threadId,
-            content: content,
-            user_id: 1 // HINWEIS: Im echten System sollte die ID des eingeloggten Benutzers verwendet werden
+            content: content
+            // Keine user_id mehr nötig, diese wird vom Backend aus der Session geholt
         })
     })
     .then(response => {
         if (!response.ok) {
+            if (response.status === 401) {
+                // Nicht autorisiert - zur Login-Seite weiterleiten
+                window.location.href = '/login/';
+                throw new Error('Nicht autorisiert');
+            }
             throw new Error('Netzwerkantwort war nicht ok');
         }
         return response.json();
@@ -105,6 +144,8 @@ function submitReply(threadId) {
     })
     .catch(error => {
         console.error('Fehler beim Erstellen der Antwort:', error);
-        alert('Fehler beim Erstellen der Antwort. Bitte versuche es später erneut.');
+        if (!error.message.includes('Nicht autorisiert')) {
+            alert('Fehler beim Erstellen der Antwort. Bitte versuche es später erneut.');
+        }
     });
 }
