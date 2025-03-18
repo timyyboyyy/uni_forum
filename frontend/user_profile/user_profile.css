@@ -1,111 +1,215 @@
-@import url('http://localhost/base.css');
+/* Allgemeine Seiteneinstellungen */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7fa;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
 
-/* Benutzerprofil */
+/* Header-Bereich */
+header {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #007BFF, #00BFFF);
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin-bottom: 10px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+/* Navigation */
+nav {
+  text-align: center;
+  background-color: #333;
+  padding: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: inline-block;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+  background-color: #007BFF;
+  border-radius: 4px;
+}
+
+/* Benutzerprofil-Container */
 .profile-container {
-    max-width: 800px;
-    margin: 2rem auto;
-  }
-  
-  .profile-card {
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    overflow: hidden;
-  }
-  
-  .profile-section {
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  
-  .profile-section:last-child {
-    border-bottom: none;
-  }
-  
-  #user-info-form, #password-form {
-    max-width: 500px;
-  }
-  
-  #created-at {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-  }
-  
-  .activity-summary {
-    margin-bottom: 1.5rem;
-  }
-  
-  .activity-summary p {
-    display: flex;
-    justify-content: space-between;
-    max-width: 300px;
-  }
-  
-  #activity-list {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  
-  #activity-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .activity-list li:last-child {
-    border-bottom: none;
-  }
+  max-width: 900px; /* Adjusted to match other pages */
+  margin: 2rem auto; /* Centers the content with space on the sides */
+  padding: 0 20px; /* Adds padding to the sides for more free space */
+}
 
-  /* Dropdown-Menü Styling */
-.dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdown-toggle {
-    color: white;
-    text-decoration: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .dropdown-toggle:hover {
-    background-color: var(--primary);
-  }
-  
-  .dropdown-menu {
-    display: none; /* Wichtig: Menü standardmäßig ausblenden */
-    position: absolute;
-    right: 0;
-    top: 100%; /* Positioniert direkt unter dem Benutzernamen */
-    background-color: white;
-    min-width: 180px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    z-index: 1000;
-    border-radius: 4px;
-    margin-top: 5px;
-  }
-  
-  .dropdown-menu a {
-    color: var(--text);
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-  }
-  
-  .dropdown-menu a:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .dropdown-divider {
-    height: 1px;
-    background-color: var(--border);
-    margin: 0;
-  }
-  
-  /* Diese Klasse wird per JavaScript hinzugefügt/entfernt */
-  .show {
-    display: block;
-  }
-  
+.profile-container h2 {
+  font-size: 1.8em;
+  color: #007BFF;
+  margin-bottom: 1.5rem;
+}
+
+/* Profil-Karte */
+.profile-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Profil-Sektionen */
+.profile-section {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-section:last-child {
+  border-bottom: none;
+}
+
+.profile-section h3 {
+  font-size: 1.5em;
+  color: #007BFF;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* Formulare */
+#user-info-form, #password-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+#created-at {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Aktivitätszusammenfassung */
+.activity-summary {
+  margin-bottom: 1.5rem;
+}
+
+.activity-summary p {
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px;
+  margin: 0;
+  font-size: 1em;
+  color: #333;
+}
+
+/* Aktivitätsliste */
+#activity-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#activity-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9em;
+  color: #666;
+}
+
+#activity-list li:last-child {
+  border-bottom: none;
+}
+
+#activity-list a {
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#activity-list a:hover {
+  text-decoration: underline;
+}
+
+/* Fehler- und Erfolgsmeldungen */
+.error-message, .success-message {
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+  display: none;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Submit-Button */
+button[type="submit"] {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Footer-Bereich */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 40px; /* Added margin to create more space above the footer */
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.9em;
+}

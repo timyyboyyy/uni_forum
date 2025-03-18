@@ -49,18 +49,19 @@ nav a:hover {
 .thread-container {
     max-width: 900px;
     margin: 2rem auto;
+    padding: 0 20px;
 }
 
 /* Thread-Header */
-.thread-header {
+.thread-title {
     background-color: #fff;
     padding: 20px;
-    border-radius: 8px 8px 0 0;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1px;
+    margin-bottom: 20px;
 }
 
-.thread-header h2 {
+.thread-title h2 {
     margin-top: 0;
     font-size: 1.8em;
     color: #007BFF;
@@ -73,21 +74,31 @@ nav a:hover {
 }
 
 /* Thread-Inhalt */
-.thread-content {
+.post.main-post {
     background-color: #fff;
     padding: 20px;
-    margin-top: 1px;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+    margin-bottom: 20px;
 }
 
-/* Beiträge */
+.post-content {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Antworten */
+#replies-container {
+    margin-top: 20px;
+}
+
 .post {
     background-color: #fff;
-    margin-bottom: 1rem;
-    padding: 15px;
-    border-radius: 4px;
+    padding: 20px;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .post-header {
@@ -95,11 +106,13 @@ nav a:hover {
     padding-bottom: 10px;
     margin-bottom: 10px;
     color: #666;
+    font-size: 0.9rem;
 }
 
 .post-content {
     font-size: 1em;
     line-height: 1.6;
+    color: #333;
 }
 
 /* Antwort-Sektion */
@@ -108,7 +121,7 @@ nav a:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
+    margin-top: 20px;
 }
 
 .reply-section h3 {
@@ -119,12 +132,13 @@ nav a:hover {
 
 #reply-content {
     width: 100%;
-    min-height: 100px;
+    min-height: 150px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1em;
     transition: border-color 0.3s ease;
+    margin-bottom: 15px;
 }
 
 #reply-content:focus {
@@ -148,6 +162,23 @@ input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
+/* Login-Hinweis */
+.login-message {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.login-message a {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-message a:hover {
+    text-decoration: underline;
+}
+
 /* Footer-Bereich */
 footer {
     text-align: center;
@@ -155,6 +186,7 @@ footer {
     background-color: #333;
     color: white;
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
 }
 
 footer p {

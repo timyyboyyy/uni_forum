@@ -3,48 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thread Ansicht</title>
+    <title>Threads</title>
     <link rel="stylesheet" href="thread.css">
 </head>
 <body>
     <header>
-        <h1>Forum - Thread Ansicht</h1>
+        <h1>Forum</h1>
+        <p>Diskutiere und teile deine Meinungen</p>
         <nav>
-            <a href="/">Startseite</a> |
-            <a href="/categories">Kategorien</a> |
-            <a href="/latest_posts">Neueste Beiträge</a> |
-            <a href="/login">Login</a>
+            <a href="/">Startseite</a>
+            <a href="/categories">Kategorien</a>
+            <a href="/latest_posts">Neuste Beiträge</a>
+            <a href="/create_post">Beitrag erstellen</a>
         </nav>
     </header>
-    
-    <div class="thread-title">
-        <h2 id="thread-title">Titel wird geladen...</h2>
-        <div id="thread-meta">Kategorie: <span id="thread-category"></span> | Autor: <span id="thread-author"></span> | <span id="thread-date"></span></div>
-    </div>
-    
-    <div class="posts">
-        <div class="post main-post">
-            <div class="post-content" id="thread-content">Inhalt wird geladen...</div>
-        </div>
-        
-        <h3>Antworten</h3>
-        <div id="replies-container">
-            <!-- Hier werden die Antworten dynamisch eingefügt -->
-        </div>
-    </div>
-    
-    <div class="reply-section">
-        <h3>Neue Antwort verfassen</h3>
-        <form id="reply-form">
-            <textarea name="content" id="reply-content" rows="5" placeholder="Deine Antwort..." required></textarea>
-            <input type="submit" value="Antwort abschicken">
-        </form>
-    </div>
-    
+
+    <main class="thread-container">
+        <!-- Thread-Header -->
+        <section class="thread-title">
+            <h2 id="thread-title">Titel wird geladen...</h2>
+            <p id="thread-category">Kategorie: Wird geladen...</p>
+            <p id="thread-author">Autor: Wird geladen...</p>
+            <p id="thread-date">Datum: Wird geladen...</p>
+        </section>
+
+        <!-- Hauptinhalt des Threads -->
+        <article class="post main-post" id="thread-content">
+            Inhalt wird geladen...
+        </article>
+
+        <!-- Antworten -->
+        <section id="replies-container">
+            <!-- Antworten werden dynamisch eingefügt -->
+        </section>
+
+        <!-- Antwort-Sektion -->
+        <section class="reply-section">
+            <h3>Neue Antwort verfassen</h3>
+            <textarea id="reply-content" placeholder="Schreibe hier deine Antwort..."></textarea>
+            <input type="submit" value="Antwort senden">
+        </section>
+    </main>
+
     <footer>
-        <p>&copy; 2025 Mein Forum. Alle Rechte vorbehalten.</p>
+        <p>&copy; 2025 Forum. Alle Rechte vorbehalten.</p>
     </footer>
-    
-<script src="thread.js"></script>
+
+    <script src="thread.js"></script>
 </body>
 </html>

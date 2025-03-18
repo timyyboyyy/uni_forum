@@ -48,5 +48,4 @@ CREATE TABLE contributions(
 INSERT INTO rules (status)
 VALUES 
     ('Admin'),
-    ('user'),
-    ('not loged in');
+    ('user');
