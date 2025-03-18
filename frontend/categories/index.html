@@ -2,37 +2,36 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Kategorien - Uni-Forum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum - Kategorien</title>
     <link rel="stylesheet" href="categories.css">
 </head>
 <body>
-
-<!-- Header -->
-<header>
-    <h1>Uni-Forum</h1>
-    <p><a href="http://localhost">Zurück zur Startseite</a></p>
-</header>
-
-<!-- Kategorienübersicht -->
-<section class="categories-section">
-    <h2>Kategorien</h2>
-    <ul class="categories-list">
-        <li><a href="thread.html">Allgemeines zum Studium</a></li>
-        <li><a href="thread.html">Prüfungsvorbereitung & Tipps</a></li>
-        <li><a href="thread.html">Technische Fragen & Support</a></li>
-        <li><a href="thread.html">Veranstaltungen & Termine</a></li>
-    </ul>
-</section>
-
-<!-- Footer -->
-<footer>
-    &copy; 2025 Uni-Forum | 
-    <a href="#">Impressum</a> | 
-    <a href="#">Datenschutzrichtlinien</a> | 
-    Kontakt: forum@uni.de
-</footer>
-
-<script src="categories.js"></script>
-
+    <header>
+        <h1>Forum - Kategorien</h1>
+    </header>
+    
+    <nav>
+        <a href="/">Startseite</a>
+        <a href="/categories/">Kategorien</a>
+        <a href="/latest_posts/">Neueste Beiträge</a>
+        <a href="/create_post/">Beitrag erstellen</a>
+        <!-- Login oder Benutzername-Dropdown wird per JS eingefügt -->
+    </nav>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Alle Kategorien</h2>
+            <ul class="categories-list">
+                <!-- Wird dynamisch gefüllt -->
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Mein Forum. Alle Rechte vorbehalten.</p>
+    </footer>
+    
+    <script src="categories.js"></script>
 </body>
 </html>

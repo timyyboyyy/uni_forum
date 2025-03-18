@@ -1,78 +1,165 @@
+/* Allgemeine Seiteneinstellungen */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7fa;
+    color: #333;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
 }
 
+/* Header-Bereich */
 header {
-    background-color: #007BFF;
-    color: white;
-    padding: 20px;
     text-align: center;
-}
-
-header a {
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #007BFF, #00BFFF);
     color: white;
-    margin: 0 10px;
-    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+header h1 {
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+/* Navigation */
+nav {
+    text-align: center;
+    background-color: #333;
+    padding: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: inline-block;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #007BFF;
+    border-radius: 4px;
+}
+
+/* Registrierungs-Container */
 .register-container {
     max-width: 500px;
-    margin: 50px auto;
-    background-color: white;
-    padding: 30px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 3rem auto;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.8em;
+    color: #007BFF;
+}
+
+/* Fehlermeldung */
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+    display: none;
+}
+
+/* Formular */
+#register-form {
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group {
     margin-bottom: 20px;
 }
 
-label {
+.form-group label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
+    font-weight: 500;
+    color: #333;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
 }
 
-button {
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Passwort-Anforderungen */
+.password-requirements {
+    margin-top: -10px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Submit-Button */
+button[type="submit"] {
     background-color: #007BFF;
     color: white;
+    padding: 10px 20px;
     border: none;
-    padding: 12px 20px;
     border-radius: 4px;
+    font-size: 1em;
     cursor: pointer;
-    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
+button[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-.error-message {
-    background-color: #ffdddd;
-    color: #ff0000;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 4px;
+/* Formular-Footer */
+.form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
 }
 
+.form-footer a {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Footer-Bereich */
 footer {
     text-align: center;
     padding: 20px;
-    margin-top: 50px;
     background-color: #333;
     color: white;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
 }

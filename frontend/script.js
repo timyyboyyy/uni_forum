@@ -1,4 +1,3 @@
-// forum.js - Datenbankintegration für das Forum
 // Am Anfang der script.js, direkt nach dem DOMContentLoaded Event
 document.addEventListener('DOMContentLoaded', function() {
     loadCategories();
@@ -83,6 +82,7 @@ function updateNavigation(userData) {
         `;
     }
 }
+
 
 
 

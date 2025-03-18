@@ -1,26 +1,30 @@
 /* Allgemeine Seiteneinstellungen */
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7fa;
     color: #333;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
 }
 
 /* Tabellen-Styling */
 table {
     width: 80%;
-    margin: 0 auto;
+    margin: 20px auto;
     border-collapse: collapse;
     background-color: #fff;
-    table-layout: fixed; /* Für gleichmäßige Spaltenverteilung */
+    table-layout: fixed;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 /* Basis-Styling für alle Zellen */
 th, td {
-    padding: 12px;
+    padding: 15px;
     border: 1px solid #ddd;
-    text-align: center; /* Zentrierter Text für Symmetrie */
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -28,48 +32,63 @@ th, td {
 /* Spaltenbreiten definieren */
 table th:nth-child(1),
 table td:nth-child(1) {
-    width: 40%; /* Kategorie-Spalte */
+    width: 40%;
 }
 
 table th:nth-child(2),
 table td:nth-child(2) {
-    width: 20%; /* Anzahl Themen - kleinere Spalte */
+    width: 20%;
 }
 
 table th:nth-child(3),
 table td:nth-child(3) {
-    width: 40%; /* Letzter Beitrag-Spalte */
+    width: 40%;
 }
 
 /* Überschriften-Styling beibehalten */
 th {
     background-color: #007BFF;
     color: white;
+    font-weight: 600;
 }
 
 /* Für verlinkte Kategorien */
 td a {
     color: #007BFF;
-    text-decoration: underline;
+    text-decoration: none;
+    font-weight: 500;
 }
 
+td a:hover {
+    text-decoration: underline;
+}
 
 /* Header-Bereich */
 header {
     text-align: center;
-    padding: 20px;
-    background-color: #007BFF;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #007BFF, #00BFFF);
     color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
     margin-bottom: 10px;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+header p {
+    font-size: 1.2em;
+    font-weight: 300;
 }
 
 /* Navigation */
 nav {
     text-align: center;
     background-color: #333;
+    padding: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 nav a {
@@ -77,28 +96,33 @@ nav a {
     text-decoration: none;
     padding: 10px 15px;
     display: inline-block;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
 }
 
 nav a:hover {
     background-color: #007BFF;
+    border-radius: 4px;
 }
 
 /* Hauptinhalt */
 main {
-    padding: 20px 0;
+    padding: 40px 0;
 }
 
 /* Footer-Bereich */
 footer {
     text-align: center;
-    padding: 15px;
+    padding: 20px;
     background-color: #333;
     color: white;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
 }
 
 footer a {
     color: #fff;
     text-decoration: none;
+    font-weight: 500;
 }
 
 footer a:hover {
@@ -114,8 +138,10 @@ footer a:hover {
 .dropdown-toggle {
     color: white;
     text-decoration: none;
-    padding: 5px 10px;
+    padding: 10px 15px;
     cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
 }
 
 .dropdown-toggle:hover {
@@ -129,7 +155,7 @@ footer a:hover {
     right: 0;
     background-color: white;
     min-width: 180px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     border-radius: 4px;
     margin-top: 5px;
@@ -145,6 +171,7 @@ footer a:hover {
     text-decoration: none;
     display: block;
     font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 .dropdown-menu a:hover {
@@ -155,4 +182,12 @@ footer a:hover {
     height: 1px;
     margin: 5px 0;
     background-color: #e9ecef;
+}
+
+/* Ladeindikator */
+.loading {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2em;
+    color: #007BFF;
 }

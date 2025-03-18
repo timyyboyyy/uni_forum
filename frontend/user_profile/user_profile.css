@@ -1,116 +1,111 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7fa;
-    margin: 0;
-    padding: 0;
-}
+@import url('http://localhost/base.css');
 
-header {
-    background-color: #007BFF;
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
-
-header a {
-    color: white;
-    margin: 0 10px;
-    text-decoration: none;
-}
-
+/* Benutzerprofil */
 .profile-container {
     max-width: 800px;
-    margin: 30px auto;
-    background-color: white;
-    padding: 30px;
+    margin: 2rem auto;
+  }
+  
+  .profile-card {
+    background-color: var(--card-bg);
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.profile-card {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-.profile-section {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+  
+  .profile-section {
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-input[readonly] {
-    background-color: #f0f0f0;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .profile-section:last-child {
+    border-bottom: none;
+  }
+  
+  #user-info-form, #password-form {
+    max-width: 500px;
+  }
+  
+  #created-at {
+    background-color: #f5f5f5;
     cursor: not-allowed;
-}
+  }
+  
+  .activity-summary {
+    margin-bottom: 1.5rem;
+  }
+  
+  .activity-summary p {
+    display: flex;
+    justify-content: space-between;
+    max-width: 300px;
+  }
+  
+  #activity-list {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  #activity-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .activity-list li:last-child {
+    border-bottom: none;
+  }
 
-button {
-    background-color: #007BFF;
+  /* Dropdown-Menü Styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-toggle {
     color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
+    text-decoration: none;
+    padding: 8px 15px;
     cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.error-message {
-    background-color: #ffdddd;
-    color: #ff0000;
-    padding: 10px;
-    margin-bottom: 20px;
     border-radius: 4px;
-}
-
-.success-message {
-    background-color: #ddffdd;
-    color: #008800;
-    padding: 10px;
-    margin-bottom: 20px;
+  }
+  
+  .dropdown-toggle:hover {
+    background-color: var(--primary);
+  }
+  
+  .dropdown-menu {
+    display: none; /* Wichtig: Menü standardmäßig ausblenden */
+    position: absolute;
+    right: 0;
+    top: 100%; /* Positioniert direkt unter dem Benutzernamen */
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
     border-radius: 4px;
-}
-
-.activity-summary {
-    margin-bottom: 20px;
-}
-
-.recent-activity ul {
-    padding-left: 20px;
-}
-
-.recent-activity li {
-    margin-bottom: 8px;
-}
-
-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #333;
-    color: white;
-    margin-top: 30px;
-}
+    margin-top: 5px;
+  }
+  
+  .dropdown-menu a {
+    color: var(--text);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .dropdown-menu a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .dropdown-divider {
+    height: 1px;
+    background-color: var(--border);
+    margin: 0;
+  }
+  
+  /* Diese Klasse wird per JavaScript hinzugefügt/entfernt */
+  .show {
+    display: block;
+  }
+  
