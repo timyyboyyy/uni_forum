@@ -99,31 +99,44 @@ function loadUserActivity() {
             // Aktivitätszähler anzeigen
             document.getElementById('thread-count').textContent = data.thread_count;
             document.getElementById('post-count').textContent = data.post_count;
-            
+
             // Aktivitätsliste füllen
             const activityList = document.getElementById('activity-list');
             activityList.innerHTML = '';
-            
+
             if (data.recent_activities && data.recent_activities.length > 0) {
                 data.recent_activities.forEach(activity => {
                     const li = document.createElement('li');
                     const link = document.createElement('a');
                     link.href = `/thread/?id=${activity.thread_id}`;
                     link.textContent = activity.title;
-                    
+
+                    // Löschbutton hinzufügen
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Löschen';
+                    deleteBtn.className = 'delete-btn';
+
+                    // Je nach Aktivitätstyp unterschiedliche Löschlogik
+                    if (activity.type === 'Thread erstellt') {
+                        deleteBtn.onclick = () => deleteThread(activity.thread_id);
+                    } else if (activity.type === 'Antwort geschrieben') {
+                        deleteBtn.onclick = () => deletePost(activity.thread_id); // threads_ID wird verwendet
+                    }
+
                     li.appendChild(document.createTextNode(`${activity.type} am ${activity.date}: `));
                     li.appendChild(link);
+                    li.appendChild(deleteBtn);
                     activityList.appendChild(li);
                 });
             } else {
-                activityList.innerHTML = '<li>Keine kürzlichen Aktivitäten</li>';
+                activityList.innerHTML = '<li>Keine Aktivitäten gefunden.</li>';
             }
         })
         .catch(error => {
-            console.error('Fehler beim Laden der Benutzeraktivitäten:', error);
-            document.getElementById('activity-list').innerHTML = '<li>Fehler beim Laden der Aktivitäten</li>';
+            console.error('Fehler beim Laden der Aktivitäten:', error);
         });
 }
+
 
 // Benutzerinformationen aktualisieren
 function updateUserInfo() {
@@ -238,3 +251,75 @@ function showSuccess(message) {
         successElement.style.display = 'none';
     }, 5000);
 }
+
+// Neue Funktionen hinzufügen
+function deletePost(postId) {
+    if(confirm('Möchten Sie diesen Beitrag wirklich löschen?')) {
+        fetch(`/api/delete-post/${postId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                loadUserActivity();
+                alert('Beitrag erfolgreich gelöscht');
+            }
+        });
+    }
+}
+
+function deleteAccount() {
+    if(confirm('Möchten Sie Ihr Konto wirklich unwiderruflich löschen?\nDiese Aktion kann nicht rückgängig gemacht werden!')) {
+        fetch('/api/delete-account', {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                window.location.href = '/logout';
+            }
+        });
+    }
+}
+
+function deleteThread(threadId) {
+    if (confirm('Möchten Sie diesen Thread wirklich löschen?')) {
+        fetch(`/api/delete-thread/${threadId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Thread erfolgreich gelöscht.');
+                loadUserActivity(); // Liste neu laden
+            } else {
+                alert('Fehler beim Löschen des Threads.');
+            }
+        })
+        .catch(error => {
+            console.error('Fehler beim Löschen des Threads:', error);
+        });
+    }
+}
+
+
+function deletePost(postId) {
+    if (confirm('Möchten Sie diesen Beitrag wirklich löschen?')) {
+        fetch(`/api/delete-post/${postId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Beitrag erfolgreich gelöscht.');
+                loadUserActivity(); // Liste neu laden
+            } else {
+                alert('Fehler beim Löschen des Beitrags.');
+            }
+        })
+        .catch(error => {
+            console.error('Fehler beim Löschen des Beitrags:', error);
+        });
+    }
+}
+

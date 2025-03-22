@@ -19,13 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event-Listener für Kategorie hinzufügen
     document.getElementById('add-category-btn').addEventListener('click', showAddCategoryModal);
     
-    // Event-Listener für Speichern der Einstellungen
-    document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
-    
     // Event-Listener für Modal-Formulare
     document.getElementById('edit-user-form').addEventListener('submit', saveUserEdit);
     document.getElementById('edit-category-form').addEventListener('submit', saveCategoryEdit);
-    
     // Lösch-Bestätigungen
     document.getElementById('confirm-delete-btn').addEventListener('click', executeDelete);
     document.getElementById('cancel-delete-btn').addEventListener('click', closeDeleteModal);
@@ -271,7 +267,6 @@ function loadThreadsData() {
                     <td>${thread.category}</td>
                     <td>${thread.created_at}</td>
                     <td class="action-buttons">
-                        <button class="edit-btn" onclick="editThread(${thread.id})">Bearbeiten</button>
                         <button class="delete-btn" onclick="confirmDeleteThread(${thread.id})">Löschen</button>
                     </td>
                 `;
@@ -313,7 +308,6 @@ function loadPostsData() {
                     <td>${post.thread}</td>
                     <td>${post.created_at}</td>
                     <td class="action-buttons">
-                        <button class="edit-btn" onclick="editPost(${post.id})">Bearbeiten</button>
                         <button class="delete-btn" onclick="confirmDeletePost(${post.id})">Löschen</button>
                     </td>
                 `;
@@ -381,7 +375,7 @@ function searchPosts() {
 // Benutzer bearbeiten
 function editUser(userId) {
     // API-Anfrage für Benutzerdaten
-    fetch(`/api/admin/user/${userId}`)
+    fetch(`/api/admin/users/${userId}`)
         .then(response => {
             if (!response.ok) {
                 // Fallback für Testdaten
@@ -452,15 +446,7 @@ function showAddCategoryModal() {
     document.getElementById('edit-category-modal').style.display = 'block';
 }
 
-// Thread bearbeiten (placeholder)
-function editThread(threadId) {
-    alert('Thread bearbeiten: ' + threadId + '\nDiese Funktion muss noch implementiert werden.');
-}
 
-// Beitrag bearbeiten (placeholder)
-function editPost(postId) {
-    alert('Beitrag bearbeiten: ' + postId + '\nDiese Funktion muss noch implementiert werden.');
-}
 
 // Benutzer-Bearbeitung speichern
 function saveUserEdit(e) {
@@ -537,22 +523,6 @@ function saveCategoryEdit(e) {
     });
 }
 
-// Einstellungen speichern (placeholder)
-function saveSettings() {
-    const forumName = document.getElementById('forum-name').value;
-    const forumDescription = document.getElementById('forum-description').value;
-    const postsPerPage = document.getElementById('posts-per-page').value;
-    const registrationEnabled = document.getElementById('registration-enabled').checked;
-    
-    console.log('Einstellungen speichern:', {
-        forumName,
-        forumDescription,
-        postsPerPage,
-        registrationEnabled
-    });
-    
-    alert('Einstellungen gespeichert!');
-}
 
 // Löschbestätigungsfunktionen
 let currentDeleteAction = null;

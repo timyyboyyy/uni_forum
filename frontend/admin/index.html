@@ -33,7 +33,6 @@
                 <li><a href="#categories" data-tab="categories">Kategorien</a></li>
                 <li><a href="#threads" data-tab="threads">Threads</a></li>
                 <li><a href="#posts" data-tab="posts">Beiträge</a></li>
-                <li><a href="#settings" data-tab="settings">Einstellungen</a></li>
             </ul>
         </div>
 
@@ -169,30 +168,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Einstellungen Tab -->
-            <div class="admin-tab" id="settings-tab" style="display: none;">
-                <h2>Forumeinstellungen</h2>
-                <div class="settings-form">
-                    <div class="form-group">
-                        <label for="forum-name">Forumname:</label>
-                        <input type="text" id="forum-name" value="Mein Forum">
-                    </div>
-                    <div class="form-group">
-                        <label for="forum-description">Beschreibung:</label>
-                        <textarea id="forum-description" rows="3">Ein Forum für alle Themen</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="posts-per-page">Beiträge pro Seite:</label>
-                        <input type="number" id="posts-per-page" value="20" min="5" max="100">
-                    </div>
-                    <div class="form-group">
-                        <label for="registration-enabled">Registrierung erlauben:</label>
-                        <input type="checkbox" id="registration-enabled" checked>
-                    </div>
-                    <button id="save-settings-btn">Einstellungen speichern</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -241,6 +216,7 @@
             </form>
         </div>
     </div>
+  
 
     <div id="confirm-delete-modal" class="modal">
         <div class="modal-content">

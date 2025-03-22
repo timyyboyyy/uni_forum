@@ -231,10 +231,6 @@ class DataService {
     public function deleteCategory($category_id) {
         return $this->model->deleteCategory($category_id);
     }
-
-    public function updateCategory($category_id, $name, $description) {
-        return $this->model->updateCategory($category_id, $name, $description);
-    }    
     
     public function deleteThread($thread_id) {
         return $this->model->deleteThread($thread_id);
@@ -242,10 +238,6 @@ class DataService {
     
     public function deletePost($post_id) {
         return $this->model->deletePost($post_id);
-    }
-
-    public function deleteUser($user_id) {
-        return $this->model->deleteUser($user_id);
     }
     
     public function getUserById($user_id) {
@@ -261,70 +253,6 @@ class DataService {
         }
         return null;
     }
-
-    public function getCategoryById($category_id) {
-        $category = $this->model->getCategoryById($category_id);
-        if ($category) {
-            return [
-                'id' => $category['ID'],
-                'name' => $category['name'],
-                'description' => $category['description'],
-            ];
-        }
-        return null;
-    }
-    
-    public function createCategory($name, $description) {
-        // Validierung auf leere Werte
-        if (empty($name) || empty($description)) {
-            throw new InvalidArgumentException("Alle Felder müssen ausgefüllt sein");
-        }
-    
-        // Kategorie erstellen
-        $categoryId = $this->model->createCategory($name, $description);
-    
-        return [
-            'id' => $categoryId,
-            'name' => $name,
-            'description' => $description,
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-    }
-
-    public function getThreadById($thread_id) {
-        $thread = $this->model->getThreadById($thread_id);
-        
-        if (!$thread) {
-            return null;
-        }
-        
-        return [
-            'id' => $thread['ID'],
-            'title' => $thread['titel'],
-            'content' => $thread['content'],
-            'created_at' => date('d.m.Y, H:i', strtotime($thread['created_at'])) . ' Uhr',
-            'user_id' => $thread['users_ID'],
-            'category' => $thread['category_name']
-        ];
-    }
-    
-    public function getPostById($post_id) {
-        $post = $this->model->getPostById($post_id);
-        
-        if (!$post) {
-            return null;
-        }
-        
-        return [
-            'id' => $post['ID'],
-            'content' => $post['content'],
-            'created_at' => date('d.m.Y, H:i', strtotime($post['created_at'])) . ' Uhr',
-            'thread_id' => $post['threads_ID'],
-            'user_id' => $post['users_ID']
-        ];
-    }
-    
-    
     
     
 

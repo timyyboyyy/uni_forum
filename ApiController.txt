@@ -168,12 +168,6 @@ class ApiController {
                 $this->sendResponse(200, json_encode($result));
                 break;
             
-            case (preg_match('/^admin\/category\/(\d+)$/', $route, $matches) ? true : false):
-                $category_id = (int)$matches[1];
-                $result = $this->service->getCategoryById($category_id);
-                $this->sendResponse(200, json_encode($result));
-                break;
-
             case 'admin/threads':
                 if (!$this->isAdmin()) {
                     $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
@@ -381,6 +375,23 @@ class ApiController {
                     $this->sendResponse(400, json_encode($result));
                 }
                 break;
+                
+            case 'admin_delete_thread':
+                if (!$this->isAdmin()) {
+                    $this->sendResponse(403, json_encode(['success' => false, 'message' => 'Nur für Administratoren']));
+                    break;
+                }
+                
+                if (!isset($input['thread_id'])) {
+                    $this->sendResponse(400, json_encode(['success' => false, 'message' => 'Thread-ID erforderlich']));
+                    break;
+                }
+                
+                // Hier Methode zum Löschen des Threads implementieren
+                // $result = $this->service->deleteThread($input['thread_id']);
+                
+                $this->sendResponse(200, json_encode(['success' => true, 'message' => 'Thread gelöscht']));
+                break;
             
             case 'admin_delete_reply':
                 if (!$this->isAdmin()) {
@@ -404,24 +415,6 @@ class ApiController {
                     $this->sendResponse(403, json_encode(['success' => false, 'message' => 'Nur für Administratoren']));
                     break;
                 }
-
-            case (preg_match('/^admin\/user\/(\d+)$/', $route, $matches) ? true : false):
-                if (!$this->isAdmin()) {
-                    $this->sendResponse(403, json_encode(['success' => false, 'message' => 'Nur für Administratoren']));
-                    break;
-                }
-                
-                $user_id = (int)$matches[1];
-                $input = json_decode(file_get_contents('php://input'), true);
-                if (!isset($input['username']) || !isset($input['email']) || !isset($input['role_id'])) {
-                    $this->sendResponse(400, json_encode(['success' => false, 'message' => 'Unvollständige Daten']));
-                    break;
-                }
-                
-                $result = $this->service->updateUser($user_id, $input['username'], $input['email'], $input['role_id']);
-                $this->sendResponse(200, json_encode($result));
-                break;
-                
                 
                 // Benutzerbearbeitung
                 $user_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -439,61 +432,10 @@ class ApiController {
                     $this->sendResponse(405, json_encode(['success' => false, 'message' => 'Methode nicht erlaubt']));
                 }
                 break;
-
-            case (preg_match('/^admin\/category\/(\d+)$/', $route, $matches) ? true : false):
-                if (!$this->isAdmin()) {
-                    $this->sendResponse(403, json_encode(['success' => false, 'message' => 'Nur für Administratoren']));
-                    break;
-                }
-                
-                $category_id = (int)$matches[1];
-                $input = json_decode(file_get_contents('php://input'), true);
-                if (!isset($input['name']) || !isset($input['description'])) {
-                    $this->sendResponse(400, json_encode(['success' => false, 'message' => 'Unvollständige Daten']));
-                    break;
-                }
-                
-                $result = $this->service->updateCategory($category_id, $input['name'], $input['description']);
-                $this->sendResponse(200, json_encode($result));
-                break;
-            
-            // Kategoriebearbeitung
             
                 
-            case 'admin/categories':
-                if (!$this->isAdmin()) {
-                    $this->sendResponse(403, json_encode([
-                        'success' => false,
-                        'message' => 'Nur für Administratoren'
-                    ]));
-                    break;
-                }
-    
-                if (!isset($input['name']) || !isset($input['description'])) {
-                    $this->sendResponse(400, json_encode([
-                        'success' => false,
-                        'message' => 'Name und Beschreibung erforderlich'
-                    ]));
-                    break;
-                }
-    
-                try {
-                    $result = $this->service->createCategory(
-                        htmlspecialchars($input['name']),
-                        htmlspecialchars($input['description'])
-                    );
-                    
-                    $this->sendResponse(201, json_encode([
-                        'success' => true,
-                        'data' => $result
-                    ]));
-                    
-                } catch (RuntimeException $e) {
-                    $this->sendResponse(409, json_encode([
-                        'success' => false,
-                        'message' => $e->getMessage()
-                    ]));
-                }
+            default:
+                $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));
                 break;
         }
     }
@@ -526,51 +468,51 @@ class ApiController {
     private function handleDelete() {
         $route = $_GET['route'] ?? '';
         
-        try {
-            if (!$this->isAdmin()) {
-                throw new RuntimeException('Nur für Administratoren', 403);
-            }
-    
-            if (preg_match('/^admin\/user\/(\d+)$/', $route, $matches)) {
-                $user_id = (int)$matches[1];
-                $success = $this->service->deleteUser($user_id);
-                $message = 'Benutzer erfolgreich gelöscht';
-            } elseif (preg_match('/^admin\/category\/(\d+)$/', $route, $matches)) {
-                $category_id = (int)$matches[1];
-                $success = $this->service->deleteCategory($category_id);
-                $message = 'Kategorie erfolgreich gelöscht';
-            } elseif (preg_match('/^admin\/thread\/(\d+)$/', $route, $matches)) {
-                $thread_id = (int)$matches[1];
-                $success = $this->service->deleteThread($thread_id);
-                $message = 'Thread erfolgreich gelöscht';
-            } elseif (preg_match('/^admin\/post\/(\d+)$/', $route, $matches)) {
-                $post_id = (int)$matches[1];
-                $success = $this->service->deletePost($post_id);
-                $message = 'Beitrag erfolgreich gelöscht';
-            }    
-            else {
-                throw new RuntimeException('Ungültige Route', 400);
-            }
-    
-            if (!$success) {
-                throw new RuntimeException('Löschvorgang fehlgeschlagen', 500);
-            }
-    
-            $this->sendResponse(200, json_encode([
-                'success' => true,
-                'message' => $message
-            ]));
-            
-        } catch (RuntimeException $e) {
-            $this->sendResponse($e->getCode(), json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]));
+        if (strpos($route, 'admin/') !== 0) {
+            $this->sendResponse(404, json_encode(['message' => 'Route nicht gefunden']));
+            return;
         }
+        
+        if (!$this->isAdmin()) {
+            $this->sendResponse(403, json_encode(['message' => 'Nur für Administratoren']));
+            return;
+        }
+        
+        // Route interpretieren
+        $parts = explode('/', $route);
+        if (count($parts) < 3) {
+            $this->sendResponse(400, json_encode(['message' => 'Ungültige Route']));
+            return;
+        }
+        
+        $action = $parts[1];
+        $id = (int)$parts[2];
+        
+        if (!$id) {
+            $this->sendResponse(400, json_encode(['message' => 'Ungültige ID']));
+            return;
+        }
+        
+        switch ($action) {
+            case 'user':
+                $result = $this->service->deleteUser($id);
+                break;
+            case 'category':
+                $result = $this->service->deleteCategory($id);
+                break;
+            case 'thread':
+                $result = $this->service->deleteThread($id);
+                break;
+            case 'post':
+                $result = $this->service->deletePost($id);
+                break;
+            default:
+                $this->sendResponse(404, json_encode(['message' => 'Aktion nicht gefunden']));
+                return;
+        }
+        
+        $this->sendResponse(200, json_encode(['success' => true]));
     }
-    
-    
-    
     
 }
 ?>

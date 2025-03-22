@@ -145,7 +145,7 @@ class DataModel {
     public function getThreadById($thread_id) {
         // Thread-Informationen abrufen
         $query = "SELECT 
-                    t.ID, t.titel, t.content, t.created_at, t.users_ID, t.categories_ID,
+                    t.ID, t.titel, t.content, t.created_at,
                     u.username as author,
                     c.name as category_name
                   FROM 
@@ -429,45 +429,25 @@ public function getAllUsers() {
 }
 
 public function deleteUser($user_id) {
-    $this->conn->beginTransaction();
-    
-    try {
-        // Lösche alle Beiträge des Benutzers
-        $stmt_posts = $this->conn->prepare("
-            DELETE FROM contributions 
-            WHERE users_ID = :user_id
-        ");
-        $stmt_posts->execute([':user_id' => $user_id]);
-
-        // Lösche alle Threads des Benutzers
-        $stmt_threads = $this->conn->prepare("
-            DELETE FROM threads 
-            WHERE users_ID = :user_id
-        ");
-        $stmt_threads->execute([':user_id' => $user_id]);
-
-        // Lösche den Benutzer selbst
-        $stmt_user = $this->conn->prepare("
-            DELETE FROM users 
-            WHERE ID = :user_id
-        ");
-        $stmt_user->execute([':user_id' => $user_id]);
-
-        // Überprüfe ob Benutzer existiert hat
-        if ($stmt_user->rowCount() === 0) {
-            throw new RuntimeException('Benutzer existiert nicht', 404);
-        }
-
-        $this->conn->commit();
-        return true;
-
-    } catch (PDOException $e) {
-        $this->conn->rollBack();
-        error_log("Delete User Error: " . $e->getMessage());
-        return false;
-    }
+  // Zuerst alle Beiträge löschen
+  $delete_posts = "DELETE FROM contributions WHERE users_ID = :user_id";
+  $stmt_posts = $this->conn->prepare($delete_posts);
+  $stmt_posts->bindParam(':user_id', $user_id);
+  $stmt_posts->execute();
+  
+  // Dann alle Threads löschen
+  $delete_threads = "DELETE FROM threads WHERE users_ID = :user_id";
+  $stmt_threads = $this->conn->prepare($delete_threads);
+  $stmt_threads->bindParam(':user_id', $user_id);
+  $stmt_threads->execute();
+  
+  // Schließlich den Benutzer löschen
+  $delete_user = "DELETE FROM users WHERE ID = :user_id";
+  $stmt_user = $this->conn->prepare($delete_user);
+  $stmt_user->bindParam(':user_id', $user_id);
+  
+  return $stmt_user->execute();
 }
-
 
 public function getThreadCount() {
   $query = "SELECT COUNT(*) as count FROM threads";
@@ -642,117 +622,6 @@ public function getUserById($user_id) {
   $stmt->execute();
   return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
-public function getCategoryById($category_id) {
-  $query = "SELECT ID, name, description FROM categories WHERE ID = :category_id";
-  $stmt = $this->conn->prepare($query);
-  $stmt->bindParam(':category_id', $category_id);
-  $stmt->execute();
-  return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-public function updateCategory($category_id, $name, $description) {
-  // Prüfen, ob der Kategoriename bereits existiert
-  $check_query = "SELECT ID FROM categories 
-                  WHERE name = :name AND ID != :category_id";
-  
-  $check_stmt = $this->conn->prepare($check_query);
-  $check_stmt->bindParam(':name', $name);
-  $check_stmt->bindParam(':category_id', $category_id);
-  $check_stmt->execute();
-  
-  if ($check_stmt->rowCount() > 0) {
-      return ['success' => false, 'message' => 'Kategoriename existiert bereits'];
-  }
-  
-  // Kategorie aktualisieren
-  $update_query = "UPDATE categories 
-                   SET name = :name, description = :description 
-                   WHERE ID = :category_id";
-  
-  $update_stmt = $this->conn->prepare($update_query);
-  $update_stmt->bindParam(':name', $name);
-  $update_stmt->bindParam(':description', $description);
-  $update_stmt->bindParam(':category_id', $category_id);
-  
-  if ($update_stmt->execute()) {
-      return ['success' => true, 'message' => 'Kategorie erfolgreich aktualisiert'];
-  }
-  
-  return ['success' => false, 'message' => 'Fehler beim Aktualisieren der Kategorie'];
-}
-
-public function createCategory($name, $description) {
-  $this->conn->beginTransaction();
-  
-  try {
-      // Duplikatprüfung
-      $check = $this->conn->prepare("SELECT id FROM categories WHERE name = ?");
-      $check->execute([$name]);
-      
-      if ($check->rowCount() > 0) {
-          throw new RuntimeException("Kategoriename existiert bereits");
-      }
-
-      // Insert-Query mit Prepared Statement
-      $stmt = $this->conn->prepare("
-          INSERT INTO categories (name, description, created_at)
-          VALUES (?, ?, NOW())
-      ");
-      
-      $stmt->execute([$name, $description]);
-      $categoryId = $this->conn->lastInsertId();
-      
-      $this->conn->commit();
-      return $categoryId;
-
-  } catch (PDOException $e) {
-      $this->conn->rollBack();
-      error_log("Kategorie-Erstellungsfehler: " . $e->getMessage());
-      throw new RuntimeException("Datenbankfehler beim Anlegen der Kategorie");
-  }
-}
-
-public function deleteThread($thread_id) {
-  try {
-      // Transaktion starten
-      $this->conn->beginTransaction();
-      
-      // Zuerst alle Antworten (contributions) zum Thread löschen
-      $delete_contributions = "DELETE FROM contributions WHERE threads_ID = :thread_id";
-      $stmt_contributions = $this->conn->prepare($delete_contributions);
-      $stmt_contributions->bindParam(':thread_id', $thread_id);
-      $stmt_contributions->execute();
-      
-      // Dann den Thread selbst löschen
-      $delete_thread = "DELETE FROM threads WHERE ID = :thread_id";
-      $stmt_thread = $this->conn->prepare($delete_thread);
-      $stmt_thread->bindParam(':thread_id', $thread_id);
-      $stmt_thread->execute();
-      
-      // Transaktion abschließen
-      $this->conn->commit();
-      return true;
-  } catch (Exception $e) {
-      // Bei Fehler: Rollback
-      $this->conn->rollBack();
-      return false;
-  }
-}
-
-public function getPostById($post_id) {
-  $query = "SELECT ID, content, created_at, threads_ID, users_ID 
-            FROM contributions 
-            WHERE ID = :post_id";
-  
-  $stmt = $this->conn->prepare($query);
-  $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
-  $stmt->execute();
-  
-  return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-
 
 
 }

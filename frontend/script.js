@@ -90,8 +90,6 @@ function updateNavigation(userData) {
 
 
 
-
-// Funktion zum Laden der Kategoriedaten
 // Funktion zum Laden der Kategoriedaten
 function loadCategories() {
     // Anzeigen eines Ladeindikators
