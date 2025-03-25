@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadThread(threadId);
     
     // Login-Status überprüfen und Antwortsektion entsprechend anzeigen/ausblenden
-    checkLoginStatus(threadId);
+    checkLoginStatuss(threadId); // Doppel 's' weil überschneidung mit Funktion aus script.js
 });
 
 function loadThread(threadId) {
@@ -67,10 +67,15 @@ function displayThread(data) {
     } else {
         repliesContainer.innerHTML = '<p>Noch keine Antworten vorhanden.</p>';
     }
+
+    const categoriesLink = document.querySelector('nav a[href="/latest_posts/"]');
+    if (categoriesLink) {
+        categoriesLink.classList.add('active');
+    }
 }
 
 // Neue Funktion: Login-Status überprüfen
-function checkLoginStatus(threadId) {
+function checkLoginStatuss(threadId) {
     // Neuer API-Endpunkt muss in ApiController.php hinzugefügt werden
     fetch('/api/check-auth')
         .then(response => response.json())

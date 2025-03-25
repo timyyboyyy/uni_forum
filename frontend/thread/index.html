@@ -3,33 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Threads</title>
-    <link rel="stylesheet" href="thread.css">
+    <title>Thread - Uni-Forum</title>
+    <link rel="stylesheet" href="../style.css"> <!-- Main stylesheet -->
+    <link rel="stylesheet" href="thread.css"> <!-- Page-specific styles -->
 </head>
 <body>
     <header>
         <h1>Forum</h1>
-        <p>Diskutiere und teile deine Meinungen</p>
-        <nav>
-            <a href="/">Startseite</a>
-            <a href="/categories">Kategorien</a>
-            <a href="/latest_posts">Neuste Beiträge</a>
-            <a href="/create_post">Beitrag erstellen</a>
-        </nav>
+        <p>Der Treffpunkt für Diskussionen und Austausch.</p>
     </header>
+
+    <nav>
+        <!-- Navigation will be populated by JavaScript -->
+        <a href="/">Startseite</a> |
+        <a href="/categories/">Kategorien</a> |
+        <a href="/latest_posts/">Neueste Beiträge</a> |
+        <a href="/create_post/">Beitrag erstellen</a> |
+        <a href="/logout/">Logout</a>
+        <a href="/login/">Login</a> |
+        <a href="/registry/">Registrieren</a>
+    </nav>
 
     <main class="thread-container">
         <!-- Thread-Header -->
         <section class="thread-title">
             <h2 id="thread-title">Titel wird geladen...</h2>
-            <p id="thread-category">Kategorie: Wird geladen...</p>
-            <p id="thread-author">Autor: Wird geladen...</p>
-            <p id="thread-date">Datum: Wird geladen...</p>
+            <div class="thread-meta">
+                <span id="thread-category">Kategorie: Wird geladen...</span> |
+                <span id="thread-author">Autor: Wird geladen...</span> |
+                <span id="thread-date">Datum: Wird geladen...</span>
+            </div>
         </section>
 
         <!-- Hauptinhalt des Threads -->
-        <article class="post main-post" id="thread-content">
-            Inhalt wird geladen...
+        <article class="post main-post">
+            <div id="thread-content">Inhalt wird geladen...</div>
         </article>
 
         <!-- Antworten -->
@@ -39,16 +47,18 @@
 
         <!-- Antwort-Sektion -->
         <section class="reply-section">
-            <h3>Neue Antwort verfassen</h3>
-            <textarea id="reply-content" placeholder="Schreibe hier deine Antwort..."></textarea>
-            <input type="submit" value="Antwort senden">
+            <!-- Content will be populated by thread.js based on login status -->
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Forum. Alle Rechte vorbehalten.</p>
+        &copy; 2025 Uni-Forum | 
+        <a href="#">Impressum</a> | 
+        <a href="#">Datenschutzrichtlinien</a> | 
+        Kontakt: forum@uni.de
     </footer>
 
-    <script src="thread.js"></script>
+    <script src="../script.js"></script> <!-- Main navigation script -->
+    <script src="thread.js"></script> <!-- Page-specific functionality -->
 </body>
 </html>

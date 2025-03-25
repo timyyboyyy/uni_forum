@@ -171,4 +171,9 @@ function displayThreads(threads) {
             tableBody.innerHTML = '<tr><td colspan="4">Keine Themen in dieser Kategorie gefunden.</td></tr>';
         }
     }
+
+    const categoriesLink = document.querySelector('nav a[href="/categories/"]');
+    if (categoriesLink) {
+        categoriesLink.classList.add('active');
+    }
 }

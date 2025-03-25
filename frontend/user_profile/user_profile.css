@@ -45,6 +45,23 @@ nav a:hover {
   border-radius: 4px;
 }
 
+/* Active dropdown styling */
+.dropdown.active .dropdown-toggle {
+  background-color: #0056b3;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Active item in dropdown menu */
+.dropdown-menu a.active {
+  background-color: #007BFF;
+  color: white;
+}
+
+.dropdown-menu a.active:hover {
+  background-color: #0056b3;
+}
+
 /* Benutzerprofil-Container */
 .profile-container {
   max-width: 900px; /* Adjusted to match other pages */

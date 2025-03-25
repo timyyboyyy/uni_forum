@@ -24,6 +24,9 @@ function updateNavigation(userData) {
     const navElement = document.querySelector('nav');
     if (!navElement) return;
     
+    // Get current path (e.g., "/categories/")
+    const currentPath = window.location.pathname;
+    
     if (userData.loggedIn) {
         let adminMenuHtml = '';
         if (userData.isAdmin) {
@@ -31,10 +34,10 @@ function updateNavigation(userData) {
         }
         
         navElement.innerHTML = `
-            <a href="/">Startseite</a>
-            <a href="/categories/">Kategorien</a>
-            <a href="/latest_posts/">Neueste Beiträge</a>
-            <a href="/create_post/">Beitrag erstellen</a>
+            <a href="/" class="${currentPath === '/' ? 'active' : ''}">Startseite</a>
+            <a href="/categories/" class="${currentPath.startsWith('/categories') ? 'active' : ''}">Kategorien</a>
+            <a href="/latest_posts/" class="${currentPath.startsWith('/latest_posts') ? 'active' : ''}">Neueste Beiträge</a>
+            <a href="/create_post/" class="${currentPath.startsWith('/create_post') ? 'active' : ''}">Beitrag erstellen</a>
             ${adminMenuHtml}
             <div class="dropdown">
                 <a href="#" class="dropdown-toggle">${userData.username}</a>
@@ -79,11 +82,11 @@ function updateNavigation(userData) {
     } else {
         // Benutzer ist nicht eingeloggt - zeige Login/Register
         navElement.innerHTML = `
-            <a href="/">Startseite</a>
-            <a href="/categories/">Kategorien</a>
-            <a href="/latest_posts/">Neueste Beiträge</a>
-            <a href="/login/">Login</a>
-            <a href="/registry/">Registrieren</a>
+            <a href="/" class="${currentPath === '/' ? 'active' : ''}">Startseite</a>
+            <a href="/categories/" class="${currentPath.startsWith('/categories') ? 'active' : ''}">Kategorien</a>
+            <a href="/latest_posts/" class="${currentPath.startsWith('/latest_posts') ? 'active' : ''}">Neueste Beiträge</a>
+            <a href="/login/" class="${currentPath.startsWith('/login') ? 'active' : ''}">Login</a>
+            <a href="/registry/" class="${currentPath.startsWith('/registry') ? 'active' : ''}">Registrieren</a>
         `;
     }
 }

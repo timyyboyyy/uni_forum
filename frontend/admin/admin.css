@@ -45,6 +45,16 @@ nav a:hover {
     border-radius: 4px;
 }
 
+nav a.active {
+    background-color: #0056b3;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+nav a.active:hover {
+    background-color: #0056b3;
+}
+
 /* Dropdown-Menü Styling */
 .dropdown {
     position: relative;
