@@ -312,7 +312,7 @@ function loadCategoriesData() {
                     <td>${category.id}</td>
                     <td>${category.name}</td>
                     <td>${category.description}</td>
-                    <td>${category.threads}</td>
+                    <td>${category.topic_count}</td>
                     <td>${category.created_at}</td>
                     <td class="action-buttons">
                         <button class="edit-btn" onclick="editCategory(${category.id})">Bearbeiten</button>

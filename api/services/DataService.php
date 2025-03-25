@@ -24,6 +24,8 @@ class DataService {
             $categories[] = [
                 'id' => $row['id'],
                 'name' => $row['kategorie'],
+                'description' => $row['beschreibung'],
+                'created_at' => $row['erstellt_am'],
                 'topic_count' => $row['themen_anzahl'],
                 'last_post' => $row['letzter_beitrag']
             ];
@@ -31,6 +33,7 @@ class DataService {
         
         return $categories;
     }
+    
     
     public function createThread($title, $content, $category_id, $user_id) {
         return $this->model->createThread($title, $content, $category_id, $user_id);
@@ -158,7 +161,7 @@ class DataService {
                 'email' => $row['email'],
                 'role' => $row['rules_ID'] == 1 ? 'Admin' : 'User',
                 'role_id' => $row['rules_ID'],
-                'created_at' => date('d.m.Y', strtotime($row['created_at']))
+                'created_at' => $row['created_at']
             ];
         }
         
@@ -200,7 +203,7 @@ class DataService {
                 'title' => $row['titel'],
                 'author' => $row['author'],
                 'category' => $row['category_name'],
-                'created_at' => date('d.m.Y', strtotime($row['created_at']))
+                'created_at' => $row['created_at']
             ];
         }
         
@@ -217,7 +220,7 @@ class DataService {
                 'content' => $row['content'],
                 'author' => $row['author'],
                 'thread' => $row['thread_title'],
-                'created_at' => date('d.m.Y', strtotime($row['created_at']))
+                'created_at' => $row['created_at']
             ];
         }
         

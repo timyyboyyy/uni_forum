@@ -20,6 +20,8 @@ class DataModel {
       $query = "SELECT
                   c.ID as id,
                   c.name AS 'kategorie',
+                  c.description AS 'beschreibung',
+                  c.created_at AS 'erstellt_am',
                   COUNT(DISTINCT t.ID) AS 'themen_anzahl',
                   IFNULL(
                       (
