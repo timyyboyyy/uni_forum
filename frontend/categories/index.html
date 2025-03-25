@@ -4,34 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum - Kategorien</title>
-    <link rel="stylesheet" href="categories.css">
+    <link rel="stylesheet" href="../style.css"> <!-- Use the main style.css -->
+    <link rel="stylesheet" href="categories.css"> <!-- Keep categories-specific styles -->
 </head>
 <body>
     <header>
-        <h1>Forum - Kategorien</h1>
+        <h1>Forum</h1>
+        <p>Der Treffpunkt für Diskussionen und Austausch.</p>
     </header>
     
     <nav>
-        <a href="/">Startseite</a>
-        <a href="/categories/">Kategorien</a>
-        <a href="/latest_posts/">Neueste Beiträge</a>
-        <a href="/create_post/">Beitrag erstellen</a>
-        <!-- Login oder Benutzername-Dropdown wird per JS eingefügt -->
+        <!-- Navigation will be populated by JavaScript -->
+        <a href="/">Startseite</a> |
+        <a href="/categories/">Kategorien</a> |
+        <a href="/latest_posts/">Neueste Beiträge</a> |
+        <a href="/create_post/">Beitrag erstellen</a> |
+        <a href="/logout/">Logout</a>
+        <a href="/login/">Login</a> |
+        <a href="/registry/">Registrieren</a>
     </nav>
     
     <div class="container">
         <div class="card">
             <h2>Alle Kategorien</h2>
             <ul class="categories-list">
-                <!-- Wird dynamisch gefüllt -->
+                <!-- Will be dynamically filled -->
             </ul>
         </div>
     </div>
     
     <footer>
-        <p>&copy; 2025 Mein Forum. Alle Rechte vorbehalten.</p>
+        &copy; 2025 Uni-Forum | 
+        <a href="#">Impressum</a> | 
+        <a href="#">Datenschutzrichtlinien</a> | 
+        Kontakt: forum@uni.de
     </footer>
     
-    <script src="categories.js"></script>
+    <script src="../script.js"></script> <!-- Use the main script.js -->
+    <script src="categories.js"></script> <!-- Keep categories-specific JS -->
 </body>
 </html>

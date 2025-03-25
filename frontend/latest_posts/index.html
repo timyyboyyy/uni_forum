@@ -2,16 +2,30 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neueste Beiträge - Uni-Forum</title>
-    <link rel="stylesheet" href="latest_posts.css">
+    <link rel="stylesheet" href="../style.css"> <!-- Main stylesheet -->
+    <link rel="stylesheet" href="latest_posts.css"> <!-- Page-specific styles -->
 </head>
 <body>
 
 <!-- Header -->
 <header>
-    <h1>Uni-Forum</h1>
-    <p><a href="http://localhost">Zurück zur Startseite</a></p>
+    <h1>Forum</h1>
+    <p>Der Treffpunkt für Diskussionen und Austausch.</p>
 </header>
+
+<!-- Navigation -->
+<nav>
+    <!-- Navigation will be populated by JavaScript -->
+    <a href="/">Startseite</a> |
+    <a href="/categories/">Kategorien</a> |
+    <a href="/latest_posts/">Neueste Beiträge</a> |
+    <a href="/create_post/">Beitrag erstellen</a> |
+    <a href="/logout/">Logout</a>
+    <a href="/login/">Login</a> |
+    <a href="/registry/">Registrieren</a>
+</nav>
 
 <!-- Neueste Beiträge -->
 <section class="latest-posts-section">
@@ -26,30 +40,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><a href="thread.html">Wie bereite ich mich optimal auf die Klausur vor?</a></td>
-                <td>Prüfungsvorbereitung & Tipps</td>
-                <td>MaxMuster</td>
-                <td>07.03.2025, 16:45 Uhr</td>
-            </tr>
-            <tr>
-                <td><a href="thread.html">Hat jemand Erfahrung mit Online-Vorlesungen?</a></td>
-                <td>Allgemeines zum Studium</td>
-                <td>Anna123</td>
-                <td>07.03.2025, 14:30 Uhr</td>
-            </tr>
-            <tr>
-                <td><a href="thread.html">Technische Probleme mit Moodle?</a></td>
-                <td>Technische Fragen & Support</td>
-                <td>StudyBuddy</td>
-                <td>06.03.2025, 19:00 Uhr</td>
-            </tr>
-            <tr>
-                <td><a href="thread.html">Wann ist die nächste Infoveranstaltung?</a></td>
-                <td>Veranstaltungen & Termine</td>
-                <td>EventTeam</td>
-                <td>05.03.2025, 12:00 Uhr</td>
-            </tr>
+            <!-- Content will be loaded dynamically -->
+            <tr><td colspan="4">Beiträge werden geladen...</td></tr>
         </tbody>
     </table>
 </section>
@@ -62,7 +54,7 @@
     Kontakt: forum@uni.de
 </footer>
 
-<script src="latest_posts.js"></script>
-
+<script src="../script.js"></script> <!-- Main navigation script -->
+<script src="latest_posts.js"></script> <!-- Page-specific functionality -->
 </body>
 </html>
