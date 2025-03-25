@@ -284,7 +284,7 @@ function deleteAccount() {
 
 function deleteThread(threadId) {
     if (confirm('Möchten Sie diesen Thread wirklich löschen?')) {
-        fetch(`/api/delete-thread/${threadId}`, {
+        fetch(`/api/thread/${threadId}`, {
             method: 'DELETE'
         })
         .then(response => response.json())

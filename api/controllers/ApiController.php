@@ -517,60 +517,131 @@ class ApiController {
     }
     
     private function isThreadOwner($thread_id) {
-        if (!isset($_SESSION['user_id'])) return false;
-        
+        // Stellen Sie sicher, dass die Session gestartet ist
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    
+        // Überprüfen Sie, ob ein Benutzer eingeloggt ist
+        if (!isset($_SESSION['user_id'])) {
+            return false;
+        }
+    
+        // Holen Sie den Thread aus der Datenbank
         $thread = $this->service->getThread($thread_id);
-        return $thread && $thread['thread']['user_id'] == $_SESSION['user_id'];
+    
+        // Überprüfen Sie, ob der Thread existiert und ob der eingeloggte Benutzer der Besitzer ist
+        if ($thread && isset($thread['user_id'])) {
+            return $thread['user_id'] == $_SESSION['user_id'];
+        }
+    
+        // Wenn etwas schief geht, geben Sie false zurück
+        return false;
     }
+    
 
-    private function handleDelete() {
-        $route = $_GET['route'] ?? '';
-        
+    public function handleDelete() {
         try {
-            if (!$this->isAdmin()) {
-                throw new RuntimeException('Nur für Administratoren', 403);
-            }
-    
-            if (preg_match('/^admin\/user\/(\d+)$/', $route, $matches)) {
-                $user_id = (int)$matches[1];
-                $success = $this->service->deleteUser($user_id);
-                $message = 'Benutzer erfolgreich gelöscht';
-            } elseif (preg_match('/^admin\/category\/(\d+)$/', $route, $matches)) {
-                $category_id = (int)$matches[1];
-                $success = $this->service->deleteCategory($category_id);
-                $message = 'Kategorie erfolgreich gelöscht';
-            } elseif (preg_match('/^admin\/thread\/(\d+)$/', $route, $matches)) {
-                $thread_id = (int)$matches[1];
-                $success = $this->service->deleteThread($thread_id);
-                $message = 'Thread erfolgreich gelöscht';
-            } elseif (preg_match('/^admin\/post\/(\d+)$/', $route, $matches)) {
-                $post_id = (int)$matches[1];
-                $success = $this->service->deletePost($post_id);
-                $message = 'Beitrag erfolgreich gelöscht';
-            }    
-            else {
-                throw new RuntimeException('Ungültige Route', 400);
-            }
-    
-            if (!$success) {
-                throw new RuntimeException('Löschvorgang fehlgeschlagen', 500);
-            }
-    
-            $this->sendResponse(200, json_encode([
-                'success' => true,
-                'message' => $message
-            ]));
+            $urlParts = explode('/', $_SERVER['REQUEST_URI']);
             
-        } catch (RuntimeException $e) {
-            $this->sendResponse($e->getCode(), json_encode([
+            // Normale User-Löschvorgänge (Threads/Posts)
+            if (strpos($_SERVER['REQUEST_URI'], '/api/thread/') === 0) {
+                $threadId = $urlParts[3] ?? null;
+                if (!$threadId || !is_numeric($threadId)) {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'message' => 'Ungültige Thread-ID']);
+                    return;
+                }
+    
+                if ($this->isAdmin() || $this->isThreadOwner($threadId)) {
+                    $success = $this->service->deleteThread($threadId);
+                    echo json_encode(['success' => $success]);
+                    return;
+                }
+    
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Zugriff verweigert']);
+                return;
+            }
+    
+            if (strpos($_SERVER['REQUEST_URI'], '/api/delete-post/') === 0) {
+                $postId = $urlParts[3] ?? null;
+                if (!$postId || !is_numeric($postId)) {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'message' => 'Ungültige Post-ID']);
+                    return;
+                }
+    
+                if ($this->isAdmin() || $this->isPostOwner($postId)) {
+                    $success = $this->service->deletePost($postId);
+                    echo json_encode(['success' => $success]);
+                    return;
+                }
+    
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Zugriff verweigert']);
+                return;
+            }
+    
+            // Admin-Löschvorgänge
+            if (strpos($_SERVER['REQUEST_URI'], '/api/admin/') === 0) {
+                if (!$this->isAdmin()) {
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'Nur für Admins']);
+                    return;
+                }
+    
+                $entityType = $urlParts[3] ?? null;
+                $entityId = $urlParts[4] ?? null;
+    
+                if (!$entityType || !$entityId || !is_numeric($entityId)) {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'message' => 'Ungültige Parameter']);
+                    return;
+                }
+    
+                $success = false;
+                switch ($entityType) {
+                    case 'user':
+                        $success = $this->service->deleteUser($entityId);
+                        break;
+                    case 'category':
+                        $success = $this->service->deleteCategory($entityId);
+                        break;
+                    case 'thread':
+                        $success = $this->service->deleteThread($entityId);
+                        break;
+                    case 'post':
+                        $success = $this->service->deletePost($entityId);
+                        break;
+                    default:
+                        http_response_code(400);
+                        echo json_encode(['success' => false, 'message' => 'Ungültiger Entitätstyp']);
+                        return;
+                }
+    
+                echo json_encode(['success' => $success]);
+                return;
+            }
+    
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Endpoint nicht gefunden']);
+    
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
                 'success' => false,
-                'message' => $e->getMessage()
-            ]));
+                'message' => 'Serverfehler: ' . $e->getMessage()
+            ]);
         }
     }
     
-    
-    
-    
+    // Füge diese Funktion für Post-Besitzerüberprüfung hinzu
+    private function isPostOwner($post_id) {
+        if (!isset($_SESSION['user_id'])) return false;
+        
+        $post = $this->service->getPost($post_id);
+        return $post && $post['user_id'] == $_SESSION['user_id'];
+    }
 }
 ?>

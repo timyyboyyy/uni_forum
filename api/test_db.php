@@ -1,17 +1,14 @@
 <?php
-require __DIR__ . '/config/Database.php';
+require_once __DIR__ . '/controllers/ApiController.php';
 
-try {
-    $database = new Database();
-    $conn = $database->getConnection();
-    
-    if ($conn) {
-        echo "Datenbankverbindung erfolgreich!";
-        // Testabfrage
-        $stmt = $conn->query("SELECT COUNT(*) AS count FROM categories");
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo "<br>Anzahl Kategorien: " . $result['count'];
-    }
-} catch(PDOException $e) {
-    echo "Verbindungsfehler: " . $e->getMessage();
-}
+// Erstelle das Service-Objekt
+$service = new ForumService();
+
+// Instanziiere den ApiController mit dem Service-Objekt
+$apiController = new ApiController($service);
+
+// Teste die Methode isThreadAuthor
+session_start();
+$_SESSION['user_id'] = 123; // Simuliere einen Benutzer
+$result = $apiController->isThreadAuthor(27);
+var_dump($result);
