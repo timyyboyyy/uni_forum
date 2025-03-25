@@ -528,7 +528,7 @@ class ApiController {
         }
     
         // Holen Sie den Thread aus der Datenbank
-        $thread = $this->service->getThread($thread_id);
+        $thread = $this->service->getThreadById($thread_id);
     
         // Überprüfen Sie, ob der Thread existiert und ob der eingeloggte Benutzer der Besitzer ist
         if ($thread && isset($thread['user_id'])) {
@@ -538,6 +538,37 @@ class ApiController {
         // Wenn etwas schief geht, geben Sie false zurück
         return false;
     }
+
+    // Füge diese Funktion für Post-Besitzerüberprüfung hinzu
+    private function isPostOwner($post_id) {
+        // Stellen Sie sicher, dass die Session gestartet ist
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    
+        // Überprüfen Sie, ob ein Benutzer eingeloggt ist
+        if (!isset($_SESSION['user_id'])) {
+            return false;
+        }
+    
+        // Holen Sie den Post aus der Datenbank
+        $post = $this->service->getPostById($post_id);
+    
+        // Überprüfen Sie, ob der Post existiert und ob der eingeloggte Benutzer der Besitzer ist
+        if ($post && isset($post['user_id'])) {
+            // Typ-Konvertierung sicherstellen
+            return (int)$post['user_id'] === (int)$_SESSION['user_id'];
+        }
+    
+        // Wenn etwas schief geht, geben Sie false zurück
+        return false;
+    }
+
+    private function isAccountOwner($user_id) {
+        // Prüfung, ob die Session-ID mit der Ziel-ID übereinstimmt
+        return isset($_SESSION['user_id']) && (int)$_SESSION['user_id'] === (int)$user_id;
+    }
+    
     
 
     public function handleDelete() {
@@ -546,15 +577,15 @@ class ApiController {
             
             // Normale User-Löschvorgänge (Threads/Posts)
             if (strpos($_SERVER['REQUEST_URI'], '/api/thread/') === 0) {
-                $threadId = $urlParts[3] ?? null;
-                if (!$threadId || !is_numeric($threadId)) {
+                $thread_id = $urlParts[3] ?? null;
+                if (!$thread_id || !is_numeric($thread_id)) {
                     http_response_code(400);
                     echo json_encode(['success' => false, 'message' => 'Ungültige Thread-ID']);
                     return;
                 }
     
-                if ($this->isAdmin() || $this->isThreadOwner($threadId)) {
-                    $success = $this->service->deleteThread($threadId);
+                if ($this->isAdmin() || $this->isThreadOwner($thread_id)) {
+                    $success = $this->service->deleteThread($thread_id);
                     echo json_encode(['success' => $success]);
                     return;
                 }
@@ -565,15 +596,15 @@ class ApiController {
             }
     
             if (strpos($_SERVER['REQUEST_URI'], '/api/delete-post/') === 0) {
-                $postId = $urlParts[3] ?? null;
-                if (!$postId || !is_numeric($postId)) {
+                $post_id = $urlParts[3] ?? null;
+                if (!$post_id || !is_numeric($post_id)) {
                     http_response_code(400);
                     echo json_encode(['success' => false, 'message' => 'Ungültige Post-ID']);
                     return;
                 }
     
-                if ($this->isAdmin() || $this->isPostOwner($postId)) {
-                    $success = $this->service->deletePost($postId);
+                if ($this->isAdmin() || $this->isPostOwner($post_id)) {
+                    $success = $this->service->deletePost($post_id);
                     echo json_encode(['success' => $success]);
                     return;
                 }
@@ -623,6 +654,37 @@ class ApiController {
                 echo json_encode(['success' => $success]);
                 return;
             }
+
+            // User-Konto Löschung
+            if (strpos($_SERVER['REQUEST_URI'], '/api/delete-account') === 0) {
+                session_start();
+                
+                if (!isset($_SESSION['user_id'])) {
+                    http_response_code(401);
+                    echo json_encode(['success' => false, 'message' => 'Nicht authentifiziert']);
+                    return;
+                }
+            
+                $current_user_id = $_SESSION['user_id'];
+                
+                // Berechtigungsprüfung
+                if (!$this->isAdmin() && !$this->isAccountOwner($current_user_id)) {
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'Zugriff verweigert']);
+                    return;
+                }
+            
+                $success = $this->service->deleteUser($current_user_id);
+                
+                if ($success) {
+                    session_destroy();
+                    echo json_encode(['success' => true]);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['success' => false, 'message' => 'Löschen fehlgeschlagen']);
+                }
+                return;
+            }
     
             http_response_code(404);
             echo json_encode(['success' => false, 'message' => 'Endpoint nicht gefunden']);
@@ -636,12 +698,6 @@ class ApiController {
         }
     }
     
-    // Füge diese Funktion für Post-Besitzerüberprüfung hinzu
-    private function isPostOwner($post_id) {
-        if (!isset($_SESSION['user_id'])) return false;
-        
-        $post = $this->service->getPost($post_id);
-        return $post && $post['user_id'] == $_SESSION['user_id'];
-    }
+    
 }
 ?>

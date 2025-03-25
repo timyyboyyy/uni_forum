@@ -120,7 +120,7 @@ function loadUserActivity() {
                     if (activity.type === 'Thread erstellt') {
                         deleteBtn.onclick = () => deleteThread(activity.thread_id);
                     } else if (activity.type === 'Antwort geschrieben') {
-                        deleteBtn.onclick = () => deletePost(activity.thread_id); // threads_ID wird verwendet
+                        deleteBtn.onclick = () => deletePost(activity.post_id); 
                     }
 
                     li.appendChild(document.createTextNode(`${activity.type} am ${activity.date}: `));
@@ -276,7 +276,7 @@ function deleteAccount() {
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                window.location.href = '/logout';
+                window.location.href = '/';
             }
         });
     }
@@ -304,21 +304,21 @@ function deleteThread(threadId) {
 
 
 function deletePost(postId) {
-    if (confirm('Möchten Sie diesen Beitrag wirklich löschen?')) {
+    if (confirm('Möchten Sie diese Antwort wirklich löschen?')) {
         fetch(`/api/delete-post/${postId}`, {
             method: 'DELETE'
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Beitrag erfolgreich gelöscht.');
+                alert('Antwort erfolgreich gelöscht.');
                 loadUserActivity(); // Liste neu laden
             } else {
-                alert('Fehler beim Löschen des Beitrags.');
+                alert('Fehler beim Löschen der Antwort.');
             }
         })
         .catch(error => {
-            console.error('Fehler beim Löschen des Beitrags:', error);
+            console.error('Fehler beim Löschen der Antwort:', error);
         });
     }
 }

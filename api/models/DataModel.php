@@ -321,25 +321,28 @@ public function getUserActivity($user_id) {
   $post_count = $post_stmt->fetch(PDO::FETCH_ASSOC)['post_count'];
   
   // Neueste Aktivitäten (Threads und Antworten)
+  // DataModel.php
   $activity_query = "SELECT 'Thread erstellt' as type, 
-                           t.ID as thread_id, 
-                           t.titel as title, 
-                           DATE_FORMAT(t.created_at, '%d.%m.%Y, %H:%i') as date
-                    FROM threads t 
-                    WHERE t.users_ID = :user_id 
-                    
-                    UNION ALL 
-                    
-                    SELECT 'Antwort geschrieben' as type, 
-                           t.ID as thread_id, 
-                           t.titel as title, 
-                           DATE_FORMAT(c.created_at, '%d.%m.%Y, %H:%i') as date 
-                    FROM contributions c
-                    JOIN threads t ON c.threads_ID = t.ID
-                    WHERE c.users_ID = :user_id 
-                    
-                    ORDER BY date DESC 
-                    LIMIT 10";
+                            t.ID as thread_id, 
+                            NULL as post_id,
+                            t.titel as title, 
+                            DATE_FORMAT(t.created_at, '%d.%m.%Y, %H:%i') as date
+                      FROM threads t 
+                      WHERE t.users_ID = :user_id 
+
+                      UNION ALL 
+
+                      SELECT 'Antwort geschrieben' as type, 
+                            t.ID as thread_id, 
+                            c.ID as post_id,
+                            SUBSTRING(c.content, 1, 30) as preview, 
+                            DATE_FORMAT(c.created_at, '%d.%m.%Y, %H:%i') as date 
+                      FROM contributions c
+                      JOIN threads t ON c.threads_ID = t.ID
+                      WHERE c.users_ID = :user_id 
+
+                      ORDER BY date DESC";
+
   
   $activity_stmt = $this->conn->prepare($activity_query);
   $activity_stmt->bindParam(':user_id', $user_id);
@@ -741,7 +744,7 @@ public function deleteThread($thread_id) {
 }
 
 public function getPostById($post_id) {
-  $query = "SELECT ID, content, created_at, threads_ID, users_ID 
+  $query = "SELECT *
             FROM contributions 
             WHERE ID = :post_id";
   

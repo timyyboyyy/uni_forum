@@ -1,7 +1,7 @@
 CREATE DATABASE forum_db;
 
-CREATE USER 'forum_usr'@'localhost' IDENTIFIED BY '1234';
-GRANT ALL PRIVILEGES ON forum_db.* TO 'forum_usr'@'localhost';
+CREATE USER 'user'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON forum_db.* TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 
 USE forum_db;
@@ -55,4 +55,3 @@ INSERT INTO rules (status)
 VALUES 
     ('Admin'),
     ('user'),
-    ('not loged in');

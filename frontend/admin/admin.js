@@ -550,7 +550,7 @@ function confirmDeleteThread(threadId) {
 }
 
 function confirmDeletePost(postId) {
-    document.getElementById('confirm-delete-message').textContent = `Möchtest du den Beitrag mit ID ${postId} wirklich löschen?`;
+    document.getElementById('confirm-delete-message').textContent = `Möchtest du die Antwort mit ID ${postId} wirklich löschen?`;
     document.getElementById('confirm-delete-modal').style.display = 'block';
     currentDeleteAction = 'post';
     currentDeleteId = postId;
