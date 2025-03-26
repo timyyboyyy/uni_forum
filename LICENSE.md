@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [Jahr] [Dein Name / Projektname]
+Copyright (c) [2025] [Tim Platzek / Forum]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
