@@ -71,12 +71,11 @@ forum/
    ```
 
 2. **Umgebungsvariablen konfigurieren:**
-   ***WICHTIG*** Die aktuelle .env-Datei wurde auf die Parameter der hier initialisierten MySQL Datenbank eingestellt und muss somit nicht verändert werden
    ```bash
    cp .env.example .env
    # Bearbeite die .env-Datei mit deinen eigenen Einstellungen
-
    ```
+   ***WICHTIG*** Die aktuelle .env-Datei wurde auf die Parameter der hier initialisierten MySQL Datenbank eingestellt und muss somit nicht verändert werden
 
 3. **Container starten:**
    ```bash
