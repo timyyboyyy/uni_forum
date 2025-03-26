@@ -104,4 +104,4 @@ Die Datenbank wird bei der ersten Ausführung automatisch initialisiert. Das Sch
 
 ---
 
-📌 **Lizenz**: Dieses Projekt steht unter der [MIT-Lizenz](LICENSE).
+📌 **Lizenz**: Dieses Projekt steht unter der [MIT-Lizenz](LICENSE.md).
