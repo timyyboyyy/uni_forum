@@ -72,7 +72,7 @@ forum/
 
 2. **Umgebungsvariablen konfigurieren:**
    ```bash
-   # WICHTIG Die aktuelle .env-Datei wurde auf die Parameter der hier initialisierten MySQL Datenbank eingestellt und müssen somit nicht verändert werden
+   # WICHTIG Die aktuelle .env-Datei wurde auf die Parameter der hier initialisierten MySQL Datenbank eingestellt und muss somit nicht verändert werden
    cp .env.example .env
    # Bearbeite die .env-Datei mit deinen eigenen Einstellungen
 
