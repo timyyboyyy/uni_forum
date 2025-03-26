@@ -376,3 +376,48 @@ footer p {
     margin: 0;
     font-size: 0.9em;
 }
+
+/* Recent Activities Table */
+.recent-activity {
+    margin-top: 30px;
+}
+
+.recent-activity h3 {
+    color: #007BFF;
+    margin-bottom: 15px;
+}
+
+.recent-activity table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.recent-activity th {
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.recent-activity td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.recent-activity tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.recent-activity tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Make the table responsive */
+@media (max-width: 768px) {
+    .recent-activity table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+

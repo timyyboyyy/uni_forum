@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Modal-Close-Buttons
     setupModals();
+
+    // Make sure dashboard is visible initially
+    document.getElementById('dashboard-tab').style.display = 'block';
     
     // Daten für das Dashboard laden
     loadDashboardData();
@@ -173,7 +176,15 @@ function setupTabs() {
             
             // Ausgewählten Tab-Inhalt anzeigen
             const tabId = this.getAttribute('data-tab');
-            document.getElementById(`${tabId}-tab`).style.display = 'block';
+            const tabElement = document.getElementById(`${tabId}-tab`);
+            if (tabElement) {
+                tabElement.style.display = 'block';
+                
+                // If switching to dashboard, reload the data
+                if (tabId === 'dashboard') {
+                    loadDashboardData();
+                }
+            }
         });
     });
 }
@@ -201,51 +212,47 @@ function loadDashboardData() {
     fetch('/api/admin/dashboard')
         .then(response => {
             if (!response.ok) {
-                // Fallback, falls API noch nicht implementiert
-                return {
-                    userCount: 15,
-                    categoryCount: 5,
-                    threadCount: 48,
-                    postCount: 176,
-                    recentActivity: [
-                        { action: 'Neuer Thread', user: 'MaxMuster', date: '18.03.2025, 15:30', details: 'Wie installiere ich PHP?' },
-                        { action: 'Neue Antwort', user: 'CodingGuru', date: '18.03.2025, 14:45', details: 'Re: MySQL-Verbindungsprobleme' },
-                        { action: 'Kategorie erstellt', user: 'Admin', date: '17.03.2025, 09:12', details: 'JavaScript-Tipps' },
-                        { action: 'Benutzer registriert', user: 'NewUser123', date: '16.03.2025, 18:30', details: '' }
-                    ]
-                };
+                throw new Error('Network response was not ok');
             }
             return response.json();
         })
         .then(data => {
             // Statistiken anzeigen
-            document.getElementById('user-count').textContent = data.userCount;
-            document.getElementById('category-count').textContent = data.categoryCount;
-            document.getElementById('thread-count').textContent = data.threadCount;
-            document.getElementById('post-count').textContent = data.postCount;
+            document.getElementById('user-count').textContent = data.userCount || '0';
+            document.getElementById('category-count').textContent = data.categoryCount || '0';
+            document.getElementById('thread-count').textContent = data.threadCount || '0';
+            document.getElementById('post-count').textContent = data.postCount || '0';
             
             // Aktivitätsliste füllen
             const activityList = document.getElementById('activity-list');
-            activityList.innerHTML = '';
-            
-            data.recentActivity.forEach(activity => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${activity.action}</td>
-                    <td>${activity.user}</td>
-                    <td>${activity.date}</td>
-                    <td>${activity.details}</td>
-                `;
-                activityList.appendChild(row);
-            });
+            if (activityList) {
+                activityList.innerHTML = '';
+                
+                (data.recentActivity || []).forEach(activity => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${activity.action || ''}</td>
+                        <td>${activity.user || ''}</td>
+                        <td>${activity.date || ''}</td>
+                        <td>${activity.details || ''}</td>
+                    `;
+                    activityList.appendChild(row);
+                });
+            }
         })
         .catch(error => {
             console.error('Fehler beim Laden der Dashboard-Daten:', error);
             // Fallback-Werte anzeigen
-            document.getElementById('user-count').textContent = '?';
-            document.getElementById('category-count').textContent = '?';
-            document.getElementById('thread-count').textContent = '?';
-            document.getElementById('post-count').textContent = '?';
+            document.getElementById('user-count').textContent = '0';
+            document.getElementById('category-count').textContent = '0';
+            document.getElementById('thread-count').textContent = '0';
+            document.getElementById('post-count').textContent = '0';
+            
+            // Clear and show empty activity list
+            const activityList = document.getElementById('activity-list');
+            if (activityList) {
+                activityList.innerHTML = '<tr><td colspan="4">Keine Aktivitäten gefunden</td></tr>';
+            }
         });
 }
 
