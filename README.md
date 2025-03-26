@@ -1,10 +1,10 @@
-# Uni-Forum Projekt
+# Forum Projekt
 
-Eine webbasierte Forumplattform für Hochschulen, entwickelt mit **PHP**, **MySQL** und **nginx** in einer **Docker-Umgebung**.
+Eine webbasierte Forumplattform, entwickelt mit **PHP**, **MySQL** und **nginx** in einer **Docker-Umgebung**.
 
 ## 📖 Projektbeschreibung
 
-**Uni-Forum** ist eine moderne Webapplikation, die Studierenden und Fakultätsmitgliedern ermöglicht, in einem strukturierten Online-Forum zu kommunizieren. Die Plattform bietet:
+**Forum** ist eine moderne Webapplikation, die ermöglicht, in einem strukturierten Online-Forum zu kommunizieren. Die Plattform bietet:
 
 - Erstellen von Kategorien, Threads und Beiträgen
 - Benutzerprofile mit individuellen Anpassungsmöglichkeiten
@@ -22,7 +22,7 @@ Eine webbasierte Forumplattform für Hochschulen, entwickelt mit **PHP**, **MySQ
 ## 📂 Projektstruktur
 
 ```plaintext
-uni_forum/
+forum/
 ├── api/                      # Backend API
 │   ├── config/               # Datenbankonfiguration
 │   ├── controllers/          # API Controller
@@ -93,14 +93,6 @@ uni_forum/
 
 ## ⚙ Entwicklung
 
-### Lokale Entwicklungsumgebung
-
-Entwicklungs-Container starten:
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-```
-Änderungen werden automatisch erkannt und angewendet.
-
 ### Codestruktur
 
 - **Frontend:** Modulare Struktur mit separaten JavaScript- und CSS-Dateien für jede Komponente
@@ -109,23 +101,6 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ## 📊 Datenbank-Schema
 
 Die Datenbank wird bei der ersten Ausführung automatisch initialisiert. Das Schema umfasst Tabellen für **Benutzer, Kategorien, Threads und Beiträge**.
-
-## 🤝 Beitrag zum Projekt
-
-1. **Fork des Repositories erstellen**
-2. **Feature-Branch erstellen**:
-   ```bash
-   git checkout -b feature/deine-feature
-   ```
-3. **Änderungen committen**:
-   ```bash
-   git commit -m 'Feature hinzufügen'
-   ```
-4. **Branch pushen**:
-   ```bash
-   git push origin feature/deine-feature
-   ```
-5. **Pull Request erstellen** 🚀
 
 ---
 
