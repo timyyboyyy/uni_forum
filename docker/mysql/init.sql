@@ -59,7 +59,7 @@ VALUES
 -- Beispiel-Daten für 'users'
 INSERT INTO users (password_hash, email, username, rules_ID) 
 VALUES
-('$2y$10$C680Di96Al4GKmshXxAgtOm76w/ko9obeAZyj0PN5ILPkFG1I9iu.','admin@admin.de','admin',1)
+('$2y$10$C680Di96Al4GKmshXxAgtOm76w/ko9obeAZyj0PN5ILPkFG1I9iu.','admin@admin.de','admin',1),
 ('$2y$10$4f0Jm8TnOWQeP1FfD9k34uMh3Y1H2T8PZ8NC6vB8BQQeMOkTtVpQm', 'user1@example.com', 'TechFan42', 2),
 ('$2y$10$kdj3ls9YlFkP2Xg4NR8YJe.QPdP7Zc5l43pNp8R6yx/D6flv3UI8m', 'user2@example.com', 'GamerX99', 2),
 ('$2y$10$7LmF9TpOMdsu1rGJc/dBDeMFyozF8yT/Oz/GZ6T/D/BwX5RjUKN1K', 'user3@example.com', 'RandomDude', 2);
